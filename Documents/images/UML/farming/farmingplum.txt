@@ -1,0 +1,155 @@
+@startuml FarmingSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' 1. The Actor
+actor Player
+
+' 2. The Core Classes
+class Seed {
+  - growthDays: int
+  - growthSprites: List<Sprite>
+  - dropObject: GameObject
+  - _growthStage: int
+  - _collider: Collider2D
+  - _growthEffect: GameObject
+  __
+  - Start(): void
+  + OnSpellHit(spellType): void
+  + IncreaseGrowthStage(): void
+  + IsWatered(): bool
+  + IsReadyToGrow(): bool
+  + ResetSpellHit(): void
+  + GetGrowthSprite(idx: int): Sprite
+  - Drop(): void
+}
+
+class SeedPlanter {
+  - _plantingAvailablePopup: GameObject
+  - _farmingHighlight: GameObject
+  - _soilTilemap: Tilemap
+  - _farmingManager: FarmingManager
+  - _playerInventory: PlayerItemController
+  - _audioManager: AudioManager
+  - _closestPlantableCell: Vector3Int?
+  - seedingClip: AudioClip
+  - maximumPlantingDistance: float
+  - gameCamera: Camera
+  __
+  - Start(): void
+  - Update(): void
+  - FindClosestPlantableTile(): void
+  - checkForMouseOverSoil(): void
+}
+
+class FarmingManager <<Singleton>> {
+  + {static} Instance: FarmingManager
+  - _seedRecords: Dictionary<Vector3Int, SeedRecord>
+  - _instantiatedSeeds: Dictionary<Vector3Int, GameObject>
+  - _soilTilemap: Tilemap
+  - seeds: List<GameObject>
+  - seedNames: List<string>
+  __
+  - Awake(): void
+  - Start(): void
+  - OnDestroy(): void
+  - OnSceneLoaded(scene: Scene, mode: LoadSceneMode): void
+  - ReinstantiateAllSeeds(soilGameObject: GameObject): void
+  + IsSoilFree(pos: Vector3Int): bool
+  - SaveReadinessBeforeDestroy(): void
+  - DestroyInstantiatedSeeds(): void
+  + Plant(pos: Vector3Int, seedPrefab: GameObject): void
+  + WaterTile(pos: Vector3): void
+  + StartOfFarmingDay(): void
+  + EndOfFarmingDay(): void
+  + UpdateSeedAtPos(pos: Vector3Int, seed: GameObject): void
+  + DestroySeedAtPos(pos: Vector3Int): void
+  + GetSeedByName(name: string): GameObject
+}
+
+class SeedRecord <<DataStructure>> {
+  + position: Vector3Int
+  + seedKey: string
+  + growthStage: int
+  + readyToGrow: bool
+}
+
+interface ISpellInteractable <<Interface>> {
+  + void OnSpellHit(spellType)
+}
+
+class Tilemap {
+  + HasTile(position: Vector3Int): bool
+  + WorldToCell(position: Vector3): Vector3Int
+  + GetCellCenterWorld(position: Vector3Int): Vector3
+  + SetColor(position: Vector3Int, color: Color): void
+  + CompressBounds(): void
+}
+
+' 4. GameObjects/Nodes
+node "PlayerItemController\nMonoBehaviour" as PlayerItemControllerNode
+
+node "Inventory\nGameObject" as InventoryNode
+
+node "Seed Prefab\nGameObject" as SeedPrefabNode
+
+node "SoilTileMap\nGameObject" as SoilTileMapNode
+
+node "FarmingHighlight\nGameObject" as FarmingHighlightNode
+
+node "PlantingAvailable\nGameObject" as PlantingAvailableNode
+
+node "GrowthBackground\nChild GameObject" as GrowthBackgroundNode
+
+node "Drop Object\nCollectable Prefab" as DropObjectNode
+
+' --- Relationships ---
+
+' Player to components
+Player "1" --o "1" SeedPlanter : attached
+Player "1" --o "1" PlayerItemControllerNode : attached
+
+' SeedPlanter relationships
+SeedPlanter "1" --> "1" FarmingManager : uses
+SeedPlanter "1" --> "1" PlayerItemControllerNode : references
+SeedPlanter "1" --> "1" Tilemap : reads
+SeedPlanter "1" --> "1" FarmingHighlightNode : controls
+SeedPlanter "1" --> "1" PlantingAvailableNode : controls
+SeedPlanter "1" --> "1" InventoryNode : reads selection from
+
+
+' FarmingManager relationships
+FarmingManager "1" *-- "*" SeedRecord : stores
+FarmingManager "1" --> "*" SeedPrefabNode : manages prefabs
+FarmingManager "1" --> "*" Seed : tracks instances
+FarmingManager "1" --> "1" Tilemap : modifies
+FarmingManager "1" --> "1" SoilTileMapNode : parents seeds to
+
+' SeedRecord relationships
+SeedRecord --> Seed : persists state of
+
+' Seed relationships
+Seed ..|> ISpellInteractable : implements
+Seed "1" *-- "1" GrowthBackgroundNode : contains
+Seed "1" --> "1" DropObjectNode : drops on harvest
+Seed "1" --> "1" FarmingManager : notifies
+
+' Seed Prefab composition
+SeedPrefabNode "1" *-- "1" Seed : attached
+
+' Tilemap
+SoilTileMapNode "1" *-- "1" Tilemap : component
+
+
+' Scene persistence
+FarmingManager ..> FarmingManager : <<DontDestroyOnLoad>>
+
+@enduml
+

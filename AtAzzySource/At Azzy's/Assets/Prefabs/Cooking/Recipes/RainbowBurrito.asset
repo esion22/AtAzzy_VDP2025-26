@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff7cd5f2689a0f4ea5a82140962398a, type: 3}
+  m_Name: RainbowBurrito
+  m_EditorClassIdentifier: Assembly-CSharp::Orders.Recipe
+  ingredientsNeeded: 04000000200000000d00000013000000080000000a00000019000000
+  amountNeeded: 01000000010000000100000001000000010000000100000001000000
+  orderTime: 360
+  image: {fileID: 4446585630373682445, guid: 37b7e105e84e71d419cf92f8bbb1d398, type: 3}
+  money: 1350
+  foodType: 24
+  formula:
+    station: 0
+    spells: 03000000

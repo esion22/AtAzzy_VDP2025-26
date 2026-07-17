@@ -1,0 +1,42 @@
+@startuml MoneySystem
+
+' Required for mixing Actors and Classes
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' 1. The Actor
+actor Player
+
+' 2. The Classes
+class PlayerStats {
+  - money: int
+  - _moneyDisplay: MoneyDisplay
+  __
+  + Initialize(): void
+  - FindMoneyDisplay(): void
+  + HasMoney(): bool
+  + SpendMoney(): bool
+  + AddMoney(amount: int): void
+  + GetMoney(): int
+}
+
+class MoneyDisplay {
+  + moneyText: TextMeshProGUI
+  __
+  + UpdateMoneyDisplay(money: int)
+}
+
+' --- Relationships ---
+
+' Composition: Player "owns" PlayerStats (Black Diamond on Player)
+Player "1" *-- "1" PlayerStats
+
+' Aggregation: PlayerStats "references" MoneyDisplay (White Diamond on PlayerStats)
+PlayerStats "1" o-- "1" MoneyDisplay
+
+@enduml

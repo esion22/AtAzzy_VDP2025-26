@@ -1,0 +1,105 @@
+@startuml FarmTutorial
+
+' Visual Styling
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === FARM TUTORIAL ===
+
+class FarmTutorial <<Singleton>> {
+  + {static} Instance: FarmTutorial
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - _waitCondition: Func<bool>
+  - _waitNextStep: int
+  - _currentArrow: GameObject
+  - _tutorialSeed: Seed
+  - _tutorialPotato: GameObject
+  - _seedPlanted: Seed
+  - _tutorialSeedCollider: CapsuleCollider2D
+  - _tutorialSeedPlanted: bool
+  - _highlightedSlotIndex: int
+  - tutorialPlantCell: Vector3Int
+  - tutorialSeedName: string
+  - arrowOffset: Vector3
+  - seedsInInventory: List<Collectable>
+  - TUTORIAL_COMPLETE_KEY: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - StartTutorial(): void
+  - ShowStep(step: int): void
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - WaitUntil(condition: Func<bool>, nextStep: int): void
+  - ClearWait(): void
+  - SaveOriginalDialogueSize(): void
+  - SetTutorialDialogueWidth(): void
+  - RestoreOriginalDialogueSize(): void
+  - CompleteTutorial(): void
+  - OnDisable(): void
+  - IsFarmingManagerReady(): bool
+  - IsSeedWatered(): bool
+  - IsSeedReadyToGrow(): bool
+  - IsTutorialPotatoCollected(): bool
+  - PlantTutorialSeed(): void
+  - SetTutorialPlantInteractable(enabled: bool): void
+  - ShowArrowAtWorldPosition(pos: Vector3, offset: Vector3, rotation: Quaternion): void
+  - ClearArrow(): void
+  - HighlightSpellSlot(slotIndex: int): void
+  - ClearHotbarHighlight(): void
+  - SetHouseTrigger(enabled: bool): void
+  - SetSalesmanInteractable(enabled: bool): void
+  - CellCenter(cell: Vector3Int): Vector3
+  + getCaseNum(): int
+}
+
+' === EXTERNAL SYSTEMS ===
+
+node FarmingManager
+node Inventory
+node DSDialogueUI
+node DSDialogueRunner
+node HotbarController
+node PlayerPrefs
+
+' === NODES ===
+
+node "Dragon Panel\nGameObject" as DragonPanel
+node "Arrow Prefab\nGameObject" as ArrowPrefab
+node "House Trigger\nBoxCollider2D" as HouseTrigger
+node "Salesman Collider\nBoxCollider2D" as SalesmanCollider
+node "Tutorial Seed\nSeed" as TutorialSeed
+node "Tutorial Potato\nGameObject" as TutorialPotato
+
+' === RELATIONSHIPS ===
+
+' Singleton pattern
+FarmTutorial "1" ..> "1" FarmTutorial : <<Singleton>>
+
+' UI References
+FarmTutorial "1" o-- "1" DragonPanel : references
+FarmTutorial "1" o-- "1" ArrowPrefab : references
+FarmTutorial "1" o-- "1" DSDialogueUI : references
+FarmTutorial "1" o-- "1" DSDialogueRunner : references
+FarmTutorial "1" o-- "1" HotbarController : references
+
+' Scene Object References
+FarmTutorial "1" o-- "1" HouseTrigger : references
+FarmTutorial "1" o-- "1" SalesmanCollider : references
+FarmTutorial "1" o-- "1" TutorialSeed : tracks
+FarmTutorial "1" o-- "1" TutorialPotato : tracks
+
+' System Interactions
+FarmTutorial --> FarmingManager : queries state
+FarmTutorial --> Inventory : adds seeds
+FarmTutorial --> PlayerPrefs : saves progress
+
+@enduml
+

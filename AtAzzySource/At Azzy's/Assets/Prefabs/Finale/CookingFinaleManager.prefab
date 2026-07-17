@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7051221836748440877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3424512674295275332}
+  - component: {fileID: 2169203865219782319}
+  m_Layer: 0
+  m_Name: CookingFinaleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3424512674295275332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7051221836748440877}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2169203865219782319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7051221836748440877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d8bf9df05d645ceb5816b23b3789379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameFinaleCookingManager
+  dialogueUI: {fileID: 0}
+  dialogueRunner: {fileID: 0}
+  humanPortrait: {fileID: 3664818775426322251, guid: f7a9fb508f3192d4b92c4a22e74e5224, type: 3}
+  dragonPortrait: {fileID: 21300000, guid: d849965328db13543bbe08877821dd6b, type: 3}
+  neededIngredients: 070000001500000014000000110000001f000000100000001e000000230000001a0000001b0000000c0000000800000013000000
+  neededCategories: 02000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000
+  neededQuantities: 01000000010000000100000002000000040000000100000001000000010000000100000001000000010000000100000001000000
+  azzyTargetPosition: {x: -4.5, y: 0.5, z: 0}
+  azzyHumanPrefab: {fileID: 5445322228468997643, guid: 227a322928b45d6459b778090871bf91, type: 3}
+  circlePrefab: {fileID: 3180206740659006611, guid: f448701a8ed33f546a6a79c5fe45ef1b, type: 3}
+  successScreenPrefab: {fileID: 6432488165344863706, guid: 67e620f3ae21b0b4e88fae1fb221043b, type: 3}
+  failureScreenPrefab: {fileID: 6432488165344863706, guid: 080522cce94d6b64a8f3cb1ddd9b8cf3, type: 3}

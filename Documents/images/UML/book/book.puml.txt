@@ -1,0 +1,141 @@
+@startuml BookSystem
+
+' Agreed Syntax Settings
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' --- Enums ---
+enum StationType {
+  CuttingBoard
+  Keg
+  Oven
+  Pot
+  Stove
+}
+
+enum SpellType {
+  Water
+  Fire
+  Growing
+  Cut
+}
+
+' --- Data Structures ---
+class CookingFormula <<Serializable>> {
+  + station: StationType
+  + spells: List<SpellType>
+}
+
+class Recipe <<ScriptableObject>> {
+  + ingredientsNeeded: List<CollectableType>
+  + amountNeeded: List<int>
+  + orderTime: int
+  + image: Sprite
+  + money: int
+  + foodType: CollectableType
+  + formula: CookingFormula
+}
+
+' --- Logic / Managers ---
+class RecipeTracker <<Singleton>> {
+  + {static} Instance: RecipeTracker
+  - allRecipes: List<Recipe>
+  - unlockedRecipes: List<bool>
+  - OnRecipeUnlocked: Action<CollectableType>
+  __
+  + UnlockRecipe(CollectableType): void
+  + IsUnlocked(Recipe): bool
+  + GetUnlockedRecipes(): List<Recipe>
+  + GetAllRecipes(): List<Recipe>
+}
+
+' --- UI Classes ---
+class BookInput {
+  - bookPanel: BookPanelUI
+  - isOpen: bool
+  __
+  + Update(): void
+  - ToggleBook(): void
+}
+
+class BookPanelUI {
+  - leftPageGrid: Transform
+  - rightPageUI: RightPageUI
+  - recipeIconPrefab: RecipeIconUI
+  - iconLookup: Dictionary<CollectableType, RecipeIconUI>
+  - currentlySelected: RecipeIconUI
+  __
+  + PopulateLeftPage(): void
+  + ShowRecipe(Recipe): void
+  + OpenBook(): void
+  + CloseBook(): void
+  - HandleRecipeUnlocked(CollectableType): void
+}
+
+class RecipeIconUI {
+  - backgroundImage: Image
+  - iconImage: Image
+  - button: Button
+  - recipe: Recipe
+  __
+  + Init(Recipe, bool, BookPanelUI): void
+  + SetBackgrounds(Sprite, Sprite): void
+  + SetUnlocked(bool): void
+  + SetSelected(bool): void
+  - OnClicked(): void
+}
+
+class RightPageUI {
+  - formulaParent: Transform
+  - formulaPrefab: CookingFormulaUI
+  + recipeIconImage: Image
+  + recipePrice: GameObject
+  + recipePriceText: TextMeshProUGUI
+  __
+  + DisplayRecipe(Recipe): void
+}
+
+class CookingFormulaUI {
+  - stationParent: Transform
+  - ingredientsParent: Transform
+  - spellsParent: Transform
+  - stationIcons: Sprite[]
+  - spellIcons: Sprite[]
+  __
+  + Setup(Recipe): void
+  - getCollectableByCategoryType(CollectableType): Collectable
+  - GetStationScale(StationType): float
+  - ClearAll(): void
+}
+
+' --- Relationships ---
+
+' Input & Main Panel
+BookInput --> BookPanelUI : references
+
+' BookPanel & Children
+BookPanelUI ..> RecipeIconUI : instantiates
+BookPanelUI --> RightPageUI : references
+RecipeIconUI --> BookPanelUI : callback
+
+' BookPanel & Tracker
+BookPanelUI --> RecipeTracker : Instance
+RecipeTracker ..> BookPanelUI : OnRecipeUnlocked event
+
+' Right Page Logic
+RightPageUI ..> CookingFormulaUI : instantiates
+
+' Data Connections
+RecipeTracker --> Recipe : manages
+RightPageUI --> Recipe : displays
+CookingFormulaUI --> Recipe : processes
+
+' Recipe Internal Structure
+Recipe *-- CookingFormula : contains
+CookingFormula --> StationType : uses
+CookingFormula --> SpellType : uses
+
+@enduml

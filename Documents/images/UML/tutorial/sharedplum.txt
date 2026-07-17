@@ -1,0 +1,92 @@
+@startuml TutorialSystemShared
+
+' Visual Styling
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === SHARED TUTORIAL BASE ===
+
+abstract class TutorialBase <<Abstract>> {
+  + {static} Instance: TutorialBase
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - _waitCondition: Func<bool>
+  - _waitNextStep: int
+  - _originalDialogueWidth: float
+  - _originalDialoguePosition: Vector2
+  - _originalFontSize: float
+  - _highlightedSlotIndex: int
+  - TUTORIAL_COMPLETE_KEY: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - StartTutorial(): void
+  - ShowStep(step: int): void
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - WaitUntil(condition: Func<bool>, nextStep: int): void
+  - ClearWait(): void
+  - SaveOriginalDialogueSize(): void
+  - SetTutorialDialogueWidth(): void
+  - RestoreOriginalDialogueSize(): void
+  - CompleteTutorial(): void
+  - OnDisable(): void
+  - HighlightSpellSlot(slotIndex: int): void
+  - ClearHotbarHighlight(): void
+}
+
+class TutorialResetter {
+  + {static} ResetAllTutorials(): void
+}
+
+' === VISUAL GUIDANCE ===
+
+class ArrowIndicator {
+  - target: Transform
+  - arrowUI: RectTransform
+  - edgePadding: float
+  - rotationOffset: float
+  __
+  - Awake(): void
+  - Update(): void
+  + SetTarget(newTarget: Transform): void
+  + ClearTarget(): void
+  - UpdateArrowTowardsTarget(targetWorldPos: Vector3): void
+}
+
+' === EXTERNAL SYSTEMS ===
+
+node DSDialogueUI
+node DSDialogueRunner
+node HotbarController
+node PlayerPrefs
+
+' === NODES ===
+
+node "Dragon Panel\nGameObject" as DragonPanel
+node "Arrow Prefab\nGameObject" as ArrowPrefab
+
+' === RELATIONSHIPS ===
+
+' Tutorial Base Pattern
+TutorialBase "1" ..> "1" TutorialBase : <<Singleton>>
+
+' UI References
+TutorialBase "1" o-- "1" DragonPanel : references
+TutorialBase "1" o-- "1" ArrowPrefab : references
+TutorialBase "1" o-- "1" DSDialogueUI : references
+TutorialBase "1" o-- "1" DSDialogueRunner : references
+TutorialBase "1" o-- "1" HotbarController : references
+
+' Persistence
+TutorialBase --> PlayerPrefs : uses
+TutorialResetter --> PlayerPrefs : uses
+
+@enduml
+

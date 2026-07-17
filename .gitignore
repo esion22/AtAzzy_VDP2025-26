@@ -1,0 +1,19 @@
+# Executables & Builds (Very large, compiled binaries - keep on itch.io or local only)
+Executables/
+
+# Unity temporary files & logs (root fallback)
+AtAzzySource/At Azzy's/[Ll]ibrary/
+AtAzzySource/At Azzy's/[Tt]emp/
+AtAzzySource/At Azzy's/[Oo]bj/
+AtAzzySource/At Azzy's/[Bb]uild/
+AtAzzySource/At Azzy's/[Bb]uilds/
+AtAzzySource/At Azzy's/[Logs]/
+AtAzzySource/At Azzy's/UserSettings/
+
+# Specific Asset files (large binary descriptors)
+AtAzzySource/At Azzy's/Assets/TextMesh Pro/Fonts/pixel_operator/PixelOperator SDF.asset
+AtAzzySource/At Azzy's/Assets/TextMesh Pro/Resources/Fonts & Materials/dogica SDF.asset
+
+# OS files
+.DS_Store
+Thumbs.db

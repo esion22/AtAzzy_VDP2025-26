@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff7cd5f2689a0f4ea5a82140962398a, type: 3}
+  m_Name: CookedSteak
+  m_EditorClassIdentifier: Assembly-CSharp::Orders.Recipe
+  ingredientsNeeded: 1b000000
+  amountNeeded: 01000000
+  orderTime: 60
+  image: {fileID: 3783751772801332867, guid: 1a20c9ba962effd41ae35742edda1a13, type: 3}
+  money: 104
+  foodType: 10
+  formula:
+    station: 4
+    spells: 01000000

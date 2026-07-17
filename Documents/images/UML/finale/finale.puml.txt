@@ -1,0 +1,186 @@
+@startuml FinaleSystem
+
+' Visual Styling
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 100
+hide circle
+
+' === FINALE MANAGERS ===
+
+class GameFinaleFarmManager <<Singleton>> {
+  + {static} Instance: GameFinaleFarmManager
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - FARM_FINALE_COMPLETED_KEY: string
+  - allIngredients: List<CollectableType>
+  - allIngredientQuantities: List<int>
+  - dragonSprite: Sprite
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  + TriggerFinale(): void
+  - ShowStep(step: int): void
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - CompleteFarmFinale(): void
+  + UnlockFinaleCheat(): void
+}
+
+class GameFinaleCookingManager <<Singleton>> {
+  + {static} Instance: GameFinaleCookingManager
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - _isProcessingInventoryChange: bool
+  - _azzyWaitingForBurrito: bool
+  - _playerInRange: bool
+  - _fadeDuration: float
+  - FINALE_COMPLETED_KEY: string
+  - FARM_FINALE_COMPLETED_KEY: string
+  - neededIngredients: List<CollectableType>
+  - neededCategories: List<CollectableCategory>
+  - neededQuantities: List<int>
+  - azzyTargetPosition: Vector3
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - CookingFinaleShouldStart(): bool
+  - GetBareIngredientsFromInventory(): Dictionary<CollectableType, int>
+  + TriggerCookingFinale(): void
+  - ShowStep(step: int): void
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - CheckIfFoodAlreadyInInventory(foodType: CollectableType): bool
+  - HandleRecipeCompleted(resultType: CollectableType): void
+  - HandleCookingFailed(): void
+  + OnCookingComplete(nextStep: int): void
+  - AddRequiredIngredientsToStations(): void
+  - GiveRainbowBurritoToDragon(): bool
+  - FadeAndMoveAzzyCoroutine(): IEnumerator
+  - FadeImage(): IEnumerator
+  - TransformDragonToHuman(): IEnumerator
+  - ScaleOverTime(): IEnumerator
+  - CompleteFinale(): void
+  - FailedFinale(): void
+  - ShowSuccessScreen(): void
+  - ShowFailureScreen(): void
+  - InstantiateAndShowScreen(prefab: GameObject): void
+}
+
+' === NPC INTERACTION ===
+
+class AzzyInteraction {
+  + isDragon: bool
+  + humanDialogueContainer: DSDialogueContainerSO
+  + dragonDialogueContainer: DSDialogueContainerSO
+  + farmFinaleDialogue: DSDialogueSO
+  + humanDialogues: DSDialogueSO[]
+  + dragonDialogues: DSDialogueSO[]
+  - _playerInRange: bool
+  - _lastDialogueIndex: int
+  - FarmFinaleKey: string
+  - CookingFinaleKey: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - OnTriggerEnter2D(other: Collider2D): void
+  - OnTriggerExit2D(other: Collider2D): void
+  - UpdateDialogue(): void
+}
+
+class AzzyScript {
+  - currentNPC: GameObject
+  - isDragon: bool
+  - playerInRange: bool
+  - CookingFinaleKey: string
+  - FarmFinaleKey: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - OnTriggerEnter2D(other: Collider2D): void
+  - OnTriggerExit2D(other: Collider2D): void
+  - SpawnAzzy(): void
+  - UpdateAzzyForm(): void
+  + ConverToHuman(): void
+  + GetIsDragon(): bool
+}
+
+' === EXTERNAL SYSTEMS ===
+
+node DSDialogueUI
+node DSDialogueRunner
+node Inventory
+node RecipeTracker
+node AbstractCookingStation
+node OrderManager
+node MenuManager
+node ItemManager
+node AudioManager
+node PlayerPrefs
+node EndOfDayUI
+
+' === GAME OBJECTS ===
+
+node "Dragon Panel\nGameObject" as DragonPanel
+node "Azzy Human Prefab\nGameObject" as AzzyHumanPrefab
+node "Azzy Dragon Prefab\nGameObject" as AzzyDragonPrefab
+node "Circle Prefab\nGameObject" as CirclePrefab
+node "Success Screen\nGameObject" as SuccessScreen
+node "Failure Screen\nGameObject" as FailureScreen
+
+' === INHERITANCE & SHARED STRUCTURE ===
+
+GameFinaleFarmManager "1" o-- "1" DragonPanel : references
+GameFinaleFarmManager "1" o-- "1" DSDialogueUI : references
+GameFinaleFarmManager "1" o-- "1" DSDialogueRunner : references
+GameFinaleFarmManager --> PlayerPrefs : saves progress
+GameFinaleFarmManager --> RecipeTracker : unlocks recipes
+GameFinaleFarmManager --> Inventory : adds ingredients
+GameFinaleFarmManager --> ItemManager : retrieves prefabs
+
+GameFinaleCookingManager "1" o-- "1" DragonPanel : references
+GameFinaleCookingManager "1" o-- "1" DSDialogueUI : references
+GameFinaleCookingManager "1" o-- "1" DSDialogueRunner : references
+GameFinaleCookingManager "1" o-- "1" AzzyHumanPrefab : references
+GameFinaleCookingManager "1" o-- "1" CirclePrefab : references
+GameFinaleCookingManager "1" o-- "1" SuccessScreen : references
+GameFinaleCookingManager "1" o-- "1" FailureScreen : references
+GameFinaleCookingManager --> PlayerPrefs : saves progress
+GameFinaleCookingManager --> Inventory : validates ingredients
+GameFinaleCookingManager --> RecipeTracker : validates recipes
+GameFinaleCookingManager --> OrderManager : disables
+GameFinaleCookingManager --> MenuManager : disables
+GameFinaleCookingManager --> AudioManager : plays music
+GameFinaleCookingManager "1" --> "many" AbstractCookingStation : subscribes to events
+
+AbstractCookingStation ..> GameFinaleCookingManager : OnRecipeCompleted\nOnCookingFailed
+
+SuccessScreen "1" *-- "1" EndOfDayUI : contains
+FailureScreen "1" *-- "1" EndOfDayUI : contains
+
+' === NPC INTERACTION RELATIONSHIPS ===
+
+AzzyInteraction "1" o-- "1" AzzyHumanPrefab : references
+AzzyInteraction "1" o-- "1" AzzyDragonPrefab : references
+AzzyInteraction --> PlayerPrefs : reads finale state
+AzzyInteraction --> DSDialogueRunner : triggers dialogues
+
+AzzyScript "1" o-- "1" AzzyHumanPrefab : spawns
+AzzyScript "1" o-- "1" AzzyDragonPrefab : spawns
+AzzyScript --> PlayerPrefs : reads finale state
+
+' === FINALE PROGRESSION ===
+
+GameFinaleFarmManager ..> GameFinaleCookingManager : enables via\nFarmFinaleCompleted
+
+@enduml
+

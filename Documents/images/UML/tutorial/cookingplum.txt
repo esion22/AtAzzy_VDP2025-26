@@ -1,0 +1,153 @@
+@startuml CookingTutorial
+
+' Visual Styling
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === COOKING TUTORIAL ===
+
+class CookingTutorial <<Singleton>> {
+  + {static} Instance: CookingTutorial
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - _currentArrow: GameObject
+  - _playerInventory: Inventory
+  - _cookingStations: List<AbstractCookingStation>
+  - _orderManager: OrderManager
+  - _menuManager: MenuManager
+  - _ovenTransform: Transform
+  - _stoveTransform: Transform
+  - _cuttingBoardTransform: Transform
+  - _currentTutorialOrder: Order
+  - _isProcessingInventoryChange: bool
+  - _highlightedSlotIndex: int
+  - _savedSlots: List<SlotData>
+  - ingredientPrefabs: List<GameObject>
+  - arrowOffset: Vector3
+  - cuttingBoardArrowOffset: Vector3
+  - TUTORIAL_COMPLETE_KEY: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - StartTutorial(): void
+  - ShowStep(step: int): void
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - CompleteTutorial(): void
+  - OnDestroy(): void
+  - HandleRecipeCompleted(resultType: CollectableType): void
+  + OnCookingComplete(nextStep: int): void
+  - HandleCookingFailed(): void
+  - HandleIngredientPlaced(ingredientType: CollectableType): void
+  - HandleInventoryChanged(): void
+  - HandleSpellReceived(spellType: SpellEnum): void
+  - HighlightWorldPosition(target: Transform, customOffset: Vector3): void
+  - ClearWorldHighlight(): void
+  - HighlightSpellSlot(slotIndex: int): void
+  - ClearHotbarHighlight(): void
+  - ClearHighlights(): void
+  - GiveTutorialIngredients(): void
+  - AddIngredientToInventory(type: CollectableType, quantity: int): void
+  - SelectIngredientInInventory(targetType: CollectableType): void
+  - SavePlayerIngredients(): void
+  - RestorePlayerIngredients(): void
+  - RestoreLostIngredients(ingredientTypes: CollectableType[]): void
+  - EnsureIngredientAvailable(ingredientType: CollectableType): bool
+  - InventoryContains(type: CollectableType): bool
+  - FindIngredientPrefab(type: CollectableType): GameObject
+  - GiveCompletionRewards(): void
+}
+
+class SlotData <<Struct>> {
+  + prefabReference: GameObject
+  + quantity: int
+}
+
+' === EXTERNAL SYSTEMS ===
+
+node AbstractCookingStation
+node OrderManager
+node MenuManager
+node Inventory
+node DSDialogueUI
+node DSDialogueRunner
+node HotbarController
+node PlayerPrefs
+
+' === ENUMS ===
+
+enum CollectableType <<Enumeration>> {
+  POTATO
+  RAW_STEAK
+  LETTUCE
+  TOMATO
+  BAKED_POTATO
+  COOKED_STEAK
+  SALAD
+  BURNT
+  TRASH
+  ...
+}
+
+enum SpellEnum <<Enumeration>> {
+  FIRE
+  WATER
+  GROWTH
+  CUT
+  NONE
+}
+
+' === NODES ===
+
+node "Dragon Panel\nGameObject" as DragonPanel
+node "Arrow Prefab\nGameObject" as ArrowPrefab
+node "Oven\nTransform" as OvenTransform
+node "Stove\nTransform" as StoveTransform
+node "Cutting Board\nTransform" as CuttingBoardTransform
+
+' === RELATIONSHIPS ===
+
+' Singleton pattern
+CookingTutorial "1" ..> "1" CookingTutorial : <<Singleton>>
+
+' Struct composition
+CookingTutorial "1" *-- "many" SlotData : contains
+
+' UI References
+CookingTutorial "1" o-- "1" DragonPanel : references
+CookingTutorial "1" o-- "1" ArrowPrefab : references
+CookingTutorial "1" o-- "1" DSDialogueUI : references
+CookingTutorial "1" o-- "1" DSDialogueRunner : references
+CookingTutorial "1" o-- "1" HotbarController : references
+
+' Cooking Station References
+CookingTutorial "1" o-- "1" OvenTransform : references
+CookingTutorial "1" o-- "1" StoveTransform : references
+CookingTutorial "1" o-- "1" CuttingBoardTransform : references
+
+' System Interactions
+CookingTutorial "1" --> "many" AbstractCookingStation : subscribes to events
+CookingTutorial --> OrderManager : disables
+CookingTutorial --> MenuManager : disables
+CookingTutorial --> Inventory : manages items
+CookingTutorial --> PlayerPrefs : saves progress
+
+' Event Handlers
+AbstractCookingStation ..> CookingTutorial : OnRecipeCompleted
+AbstractCookingStation ..> CookingTutorial : OnCookingFailed
+AbstractCookingStation ..> CookingTutorial : OnIngredientPlaced
+AbstractCookingStation ..> CookingTutorial : OnSpellReceived
+Inventory ..> CookingTutorial : OnInventoryChanged
+
+' Enum Usage
+CookingTutorial --> CollectableType : uses
+CookingTutorial --> SpellEnum : uses
+
+@enduml
+

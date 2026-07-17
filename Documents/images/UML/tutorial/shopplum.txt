@@ -1,0 +1,100 @@
+@startuml ShopTutorial
+
+' Visual Styling
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === SHOP TUTORIAL ===
+
+class ShopTutorial <<Singleton>> {
+  + {static} Instance: ShopTutorial
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - _waitCondition: Func<bool>
+  - _waitNextStep: int
+  - _inventoryBeforeBuy: InventorySnapshot
+  - _dialogueCanvasGroup: CanvasGroup
+  - _lastDialogueText: string
+  - tutorialDialogueWidth: float
+  - tutorialFontSize: float
+  - cookingTutorialPanelPosition: Vector2
+  - TUTORIAL_COMPLETE_KEY: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - StartTutorialAfterRunnerStart(): IEnumerator
+  - StartTutorial(): void
+  - ShowStep(step: int): void
+  - IsShopPanelOpen(): bool
+  - HasBoughtItem(): bool
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - ForceStopRunnerDialogue(): void
+  - WaitUntil(condition: Func<bool>, nextStep: int): void
+  - ClearWait(): void
+  - SaveOriginalDialogueSize(): void
+  - SetTutorialDialogueWidth(): void
+  + RestoreOriginalDialogueSize(): void
+  - CompleteTutorial(): void
+  - OnDisable(): void
+  - SetSalesmanInteractable(enabled: bool): void
+  - InitDialogueCanvasGroup(): void
+  - SetDialogueVisible(visible: bool): void
+  - AutoUnhideForNpcDialogue(): void
+}
+
+class InventorySnapshot <<Struct>> {
+  + totalItemCount: int
+  __
+  + InventorySnapshot(inventory: Inventory)
+}
+
+' === EXTERNAL SYSTEMS ===
+
+node Inventory
+node DSDialogueUI
+node DSDialogueRunner
+node ArrowIndicator
+node PlayerPrefs
+
+' === NODES ===
+
+node "Dragon Panel\nGameObject" as DragonPanel
+node "Shop Panel\nGameObject" as ShopPanel
+node "Salesman\nTransform" as Salesman
+node "Salesman Collider\nBoxCollider2D" as SalesmanCollider
+
+' === RELATIONSHIPS ===
+
+' Singleton pattern
+ShopTutorial "1" ..> "1" ShopTutorial : <<Singleton>>
+
+' Struct composition
+ShopTutorial "1" *-- "1" InventorySnapshot : contains
+
+' UI References
+ShopTutorial "1" o-- "1" DragonPanel : references
+ShopTutorial "1" o-- "1" DSDialogueUI : references
+ShopTutorial "1" o-- "1" ArrowIndicator : references
+
+' Scene Object References
+ShopTutorial "1" o-- "1" ShopPanel : references
+ShopTutorial "1" o-- "1" Salesman : references
+ShopTutorial "1" o-- "1" SalesmanCollider : references
+
+' System Interactions
+ShopTutorial --> Inventory : compares snapshots
+ShopTutorial --> DSDialogueRunner : stops dialogue
+ShopTutorial --> PlayerPrefs : validates prerequisites\nsaves progress
+
+' Struct relationship
+InventorySnapshot --> Inventory : reads state
+
+@enduml
+

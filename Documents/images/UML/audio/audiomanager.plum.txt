@@ -1,0 +1,171 @@
+@startuml AudioSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === MAIN AUDIO SYSTEM ===
+
+class AudioManager <<Singleton>> {
+  + {static} Instance: AudioManager
+  - backgroundMusicSource: AudioSource
+  - sfxSource: AudioSource
+  - walkingSource: AudioSource
+  - boilingSource: AudioSource
+  - cuttingSource: AudioSource
+  - stoveSource: AudioSource
+  - ovenSource: AudioSource
+  - kegSource: AudioSource
+  - backgroundMusicFarm: AudioClip
+  - backgroundMusicTavern: AudioClip
+  - backgroundFinaleMusic: AudioClip
+  - finaleTransformationMusic: AudioClip
+  - finaleHappyEndingMusic: AudioClip
+  - walkingInside: List<AudioClip>
+  - walkingOutside: List<AudioClip>
+  - cookingReadySFX: AudioClip
+  - cookingFailedSFX: AudioClip
+  - pickupItemSFX: AudioClip
+  - _currentScene: Scene
+  - _isFirst: bool
+  - fadeOutCoroutine: Coroutine
+  __
+  - Awake(): void
+  + Start(): void
+  - OnSceneLoaded(scene: Scene, mode: LoadSceneMode): void
+  + PlayBackgroundMusic(musicClip: AudioClip): void
+  + PlayBackgroundFarmMusic(): void
+  + PlayBackgroundTavernMusic(): void
+  + PlaySFX(sfxClip: AudioClip): void
+  + PlaySFXVolumeReduced(sfxClip: AudioClip, volumeScale: float): void
+  + PlayWalkingSound(): void
+  + IsWalkingSoundPlaying(): bool
+  + StopWalkingSound(): void
+  + PlayBoilingSound(stop: bool): void
+  + PlayCuttingSound(): void
+  + PlayStoveSound(stop: bool): void
+  + PlayOvenSound(stop: bool): void
+  + PlayKegSound(stop: bool): void
+  + PlayCookingReadySound(): void
+  + PlayCookingFailedSound(): void
+  + PlayPickupItemSound(): void
+  + SetMusicVolume(volume: float): void
+  + SetSFXVolume(volume: float): void
+  + PlayBackgroundFinaleMusic(): void
+  + PlayFinaleHappyEndingMusic(): void
+  + StopBackgroundMusic(fadeDuration: float): void
+  - FadeOutMusic(audioSource: AudioSource, duration: float): IEnumerator
+}
+
+class SettingsMenu {
+  + musicSlider: Slider
+  + sfxSlider: Slider
+  __
+  - Start(): void
+  + ifMusicVolumeChanged(volume: float): void
+  + ifSFXVolumeChanged(volume: float): void
+}
+
+' === SYSTEMS THAT USE AUDIO ===
+
+node SpellCaster
+
+node SpellProjectile
+
+node PlayerItemController
+
+node ShopManager
+
+node SeedPlanter
+
+' === UNITY COMPONENTS ===
+
+class AudioSource <<Unity>> {
+  + clip: AudioClip
+  + volume: float
+  + loop: bool
+  + isPlaying: bool
+  __
+  + Play(): void
+  + Stop(): void
+  + PlayOneShot(clip: AudioClip): void
+  + PlayOneShot(clip: AudioClip, volumeScale: float): void
+}
+
+class AudioClip <<Unity>> {
+}
+
+class Scene <<Unity>> {
+  + name: string
+}
+
+class SceneManager <<Unity>> {
+  + {static} sceneLoaded: event
+}
+
+' === UI COMPONENTS ===
+
+class Slider <<Unity UI>> {
+  + onValueChanged: UnityEvent<float>
+}
+
+' === NODES (GameObjects) ===
+
+node "AudioManager\nGameObject" as AudioManagerGO
+
+note right of AudioManagerGO
+  Persists across scenes
+  (DontDestroyOnLoad)
+end note
+
+node "Settings Menu\nUI Canvas" as SettingsMenuUI
+
+node "Music Slider\nUI Slider" as MusicSliderUI
+
+node "SFX Slider\nUI Slider" as SFXSliderUI
+
+' === RELATIONSHIPS ===
+
+' Singleton pattern
+AudioManager "1" ..> "1" AudioManager : <<Singleton>>
+
+' AudioManager GameObject composition
+AudioManagerGO "1" *-- "1" AudioManager : contains
+
+' AudioManager owns multiple AudioSources
+AudioManager "1" *-- "8" AudioSource : owns
+AudioManager "1" o-- "many" AudioClip : references
+
+' AudioManager subscribes to scene events
+AudioManager --> SceneManager : subscribes to\nsceneLoaded
+AudioManager --> Scene : uses
+
+' Settings Menu relationships
+SettingsMenuUI "1" *-- "1" SettingsMenu : contains
+SettingsMenuUI "1" *-- "1" MusicSliderUI : contains
+SettingsMenuUI "1" *-- "1" SFXSliderUI : contains
+SettingsMenu "1" o-- "1" Slider : musicSlider
+SettingsMenu "1" o-- "1" Slider : sfxSlider
+SettingsMenu --> AudioManager : calls volume methods
+
+' Systems using AudioManager
+SpellCaster "1" --> "1" AudioManager : calls PlaySFX
+SpellProjectile "1" --> "1" AudioManager : calls PlaySFXVolumeReduced
+PlayerItemController "1" --> "1" AudioManager : calls PlaySFX
+ShopManager "1" --> "1" AudioManager : calls PlaySFX
+SeedPlanter "1" --> "1" AudioManager : calls PlaySFX
+
+' AudioClip references in other systems
+SpellCaster "1" o-- "4" AudioClip : spell sfx
+SpellProjectile "1" o-- "4" AudioClip : impact sfx
+PlayerItemController "1" o-- "1" AudioClip : drop sfx
+ShopManager "1" o-- "1" AudioClip : purchase sfx
+SeedPlanter "1" o-- "1" AudioClip : seeding sfx
+
+@enduml
+

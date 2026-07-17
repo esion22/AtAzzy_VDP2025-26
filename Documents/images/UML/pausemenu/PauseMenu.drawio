@@ -1,0 +1,128 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.4.0">
+  <diagram name="Pagina-1" id="p0orT5CEFz6ZR1OKMt6W">
+    <mxGraphModel dx="1869" dy="562" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="PauseMenu" vertex="1">
+          <mxGeometry height="440" width="200" x="250" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-2" parent="ATdMYzoza_IIUyeIa6tU-1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ Instance: PauseMenu&lt;/div&gt;&lt;div&gt;- pauseMenuUI: GameObject&lt;/div&gt;&lt;div&gt;- settingsMenuUI: GameObject&lt;/div&gt;&lt;div&gt;- hudCanvasGroup: CanvasGroup&lt;/div&gt;&lt;div&gt;+ isPaused: bool&lt;/div&gt;&lt;div&gt;- SALES_DIALOGUE: string&lt;/div&gt;&lt;div&gt;- previousTimeScale: float&lt;/div&gt;&lt;div&gt;- _gameFinaleFarmManager: GameFinaleFarmManager&lt;/div&gt;&lt;div&gt;- _currentScene: string&lt;/div&gt;&lt;div&gt;- unlockFinaleButton: GameObject&lt;/div&gt;" vertex="1">
+          <mxGeometry height="174" width="200" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-3" parent="ATdMYzoza_IIUyeIa6tU-1" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
+          <mxGeometry height="8" width="200" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-4" parent="ATdMYzoza_IIUyeIa6tU-1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;- Awake(): void&lt;/div&gt;&lt;div&gt;- OnDestroy(): void&lt;/div&gt;&lt;div&gt;- Update(): void&lt;/div&gt;&lt;div&gt;- UnlockFinaleButtonState(): void&lt;/div&gt;&lt;div&gt;- OnSceneLoaded(): void&lt;/div&gt;&lt;div&gt;- BindHUD(): void&lt;/div&gt;&lt;div&gt;- Pause(): void&lt;/div&gt;&lt;div&gt;+ Resume(): void&lt;/div&gt;&lt;div&gt;+ PauseButton(): void&lt;/div&gt;&lt;div&gt;+ OpenSettings(): void&lt;/div&gt;&lt;div&gt;+ CloseSettings(): void&lt;/div&gt;&lt;div&gt;- SetHUDVisible(visible: bool): void&lt;/div&gt;&lt;div&gt;- IsBootScene(): bool&lt;/div&gt;&lt;div&gt;+ QuitGame(): void&lt;/div&gt;&lt;div&gt;+ UnlockFinaleContent(): void&lt;/div&gt;" vertex="1">
+          <mxGeometry height="232" width="200" y="208" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-5" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="SettingsMenu" vertex="1">
+          <mxGeometry height="140" width="260" x="567" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-6" parent="ATdMYzoza_IIUyeIa6tU-5" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ musicSlider: Slider&lt;/div&gt;&lt;div&gt;+ sfxSlider: Slider&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="44" width="260" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-7" parent="ATdMYzoza_IIUyeIa6tU-5" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
+          <mxGeometry height="8" width="260" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-8" parent="ATdMYzoza_IIUyeIa6tU-5" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;- Start(): void&lt;/div&gt;&lt;div&gt;+ isMusicVolumeChanged(volume:float): void&lt;/div&gt;&lt;div&gt;+ isSFXVolumsChanged(volume:float): void&lt;/div&gt;" vertex="1">
+          <mxGeometry height="62" width="260" y="78" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-9" edge="1" parent="1" source="ATdMYzoza_IIUyeIa6tU-5" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;rounded=0;" target="ATdMYzoza_IIUyeIa6tU-1" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="540" y="360" as="sourcePoint" />
+            <mxPoint x="700" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-10" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.3504" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-11" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.7949" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-12" edge="1" parent="1" source="ATdMYzoza_IIUyeIa6tU-1" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;entryX=0.14;entryY=0.005;entryDx=0;entryDy=0;entryPerimeter=0;" target="ATdMYzoza_IIUyeIa6tU-1" value="">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="160" />
+              <mxPoint x="210" y="60" />
+              <mxPoint x="278" y="60" />
+            </Array>
+            <mxPoint x="50" y="140" as="sourcePoint" />
+            <mxPoint x="120" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-14" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8175" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-15" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.7202" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-18" parent="1" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" value="&lt;div&gt;hudCanvasGroup&lt;/div&gt;&lt;div&gt;CanvasGroup&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="120" x="20" y="176" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-19" edge="1" parent="1" source="ATdMYzoza_IIUyeIa6tU-18" style="endArrow=diamondThin;endFill=0;endSize=24;html=1;rounded=0;" target="ATdMYzoza_IIUyeIa6tU-1" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="80" y="310" as="sourcePoint" />
+            <mxPoint x="240" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-23" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.7035" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-24" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.4326" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-21" parent="1" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" value="&lt;div&gt;_gameFinaleFarmManager&lt;/div&gt;&lt;div&gt;GameFinaleFarmManager&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="190" x="-50" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-22" edge="1" parent="1" source="ATdMYzoza_IIUyeIa6tU-21" style="endArrow=diamondThin;endFill=0;endSize=24;html=1;rounded=0;" target="ATdMYzoza_IIUyeIa6tU-1" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="70" y="440" as="sourcePoint" />
+            <mxPoint x="230" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-25" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-22" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.7196" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-26" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-22" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.1252" y="-3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-27" parent="1" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" value="&lt;div&gt;unlockFinaleButton&lt;/div&gt;&lt;div&gt;GameObject&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="130" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-28" edge="1" parent="1" source="ATdMYzoza_IIUyeIa6tU-27" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;rounded=0;" target="ATdMYzoza_IIUyeIa6tU-1" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="60" y="500" as="sourcePoint" />
+            <mxPoint x="220" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-29" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-28" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.6758" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATdMYzoza_IIUyeIa6tU-30" connectable="0" parent="ATdMYzoza_IIUyeIa6tU-28" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.4373" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

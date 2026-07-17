@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0202a3095b7477a4091d56344f0af6b3, type: 3}
+  m_Name: WelcomeFarmGraph
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::DS.Data.Save.DSGraphSaveDataSO
+  <FileName>k__BackingField: WelcomeFarm
+  <Groups>k__BackingField: []
+  <Nodes>k__BackingField:
+  - <ID>k__BackingField: 106ba531-3ba4-4de3-91d8-3928602d3e0c
+    <Name>k__BackingField: WelcomeFarm1
+    <Text>k__BackingField: "Welcome to the Magic Farm!\nA new day begins\u2014and
+      it\u2019s a calm one.\n"
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 50b06a52-2308-49d6-bc79-82fc7bded9c7
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: -50, y: 148}
+  - <ID>k__BackingField: 50b06a52-2308-49d6-bc79-82fc7bded9c7
+    <Name>k__BackingField: WelcomeFarm2
+    <Text>k__BackingField: "Here, veggies grow faster than rumors\u2014if you cast
+      your spells correctly.\nHarvest your crops, plant new seeds, and enjoy the
+      calm before tonight\u2019s chaos.\n"
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 39a626a0-7e61-4a87-b5ac-cf86f5bc923c
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 369, y: 148}
+  - <ID>k__BackingField: 39a626a0-7e61-4a87-b5ac-cf86f5bc923c
+    <Name>k__BackingField: WelcomeFarm3
+    <Text>k__BackingField: 'When you finish planting, you can go to tavern though
+      the door. '
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 967, y: 148}
+  - <ID>k__BackingField: 18da8a7d-11e5-4520-b32e-92d1b8c0a576
+    <Name>k__BackingField: RepeatWelcomeFarm
+    <Text>k__BackingField: A new morning, let's go plant!
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: -50, y: 412}
+  <OldGroupNames>k__BackingField: []
+  <OldUngroupedNodeNames>k__BackingField:
+  - WelcomeFarm1
+  - WelcomeFarm2
+  - WelcomeFarm3
+  - RepeatWelcomeFarm
+  <OldGroupedNodeNames>k__BackingField:
+    list: []

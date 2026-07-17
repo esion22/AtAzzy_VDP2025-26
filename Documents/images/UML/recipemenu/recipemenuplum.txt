@@ -1,0 +1,233 @@
+@startuml RecipeMenuSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === MAIN RECIPE MENU SYSTEM ===
+
+class MenuManager {
+  - leftPageGrid: Transform
+  - rightPageUI: RightPageUI
+  - recipeIconPrefab: RecipeIconUI
+  - leftEdgeBackground: Sprite
+  - middleBackgroundVariantA: Sprite
+  - middleBackgroundVariantB: Sprite
+  - rightEdgeBackground: Sprite
+  - leftEdgeBackgroundClicked: Sprite
+  - middleBackgroundVariantAClicked: Sprite
+  - middleBackgroundVariantBClicked: Sprite
+  - rightEdgeBackgroundClicked: Sprite
+  - columnsPerRow: int
+  - orderManager: OrderManager
+  - menuPanelUI: MenuPanelUI
+  - iconLookup: Dictionary
+  - selectedIcons: HashSet
+  - lastClickedIcon: RecipeIconUI
+  - isPrototype: bool
+  __
+  - Awake(): void
+  - PopulateLeftPage(): void
+  - GetBackgroundsForIndex(index: int): (Sprite, Sprite)
+  + OnRecipeIconClicked(recipe: Recipe, icon: RecipeIconUI): void
+  - ClearRightPage(): void
+  + DeselectAll(): void
+  + SelectAll(): void
+  + ConfirmSelection(): void
+  - IsPrototype(): bool
+  - CanCookRecipe(recipe: Recipe): bool
+  - CanCookWithIngredients(available: Dictionary, \nneeded: Dictionary): bool
+}
+
+class MenuPanelUI {
+  __
+  - Awake(): void
+  - Start(): void
+  - CheckDayAndOpen(): IEnumerator
+  + OpenMenu(): void
+  + CloseMenu(): void
+  - NotifyOrderManagerToStart(): void
+}
+
+class RecipeIconUI {
+  - backgroundImage: Image
+  - iconImage: Image
+  - button: Button
+  - recipe: Recipe
+  - parentUI: object
+  - normalBackground: Sprite
+  - clickedBackground: Sprite
+  - isSelected: bool
+  - isInteractable: bool
+  __
+  + Init(recipeData: Recipe, unlocked: bool, ui: BookPanelUI): void
+  + Init(recipeData: Recipe, canCook: bool, manager: MenuManager): void
+  + SetBackgrounds(normal: Sprite, clicked: Sprite): void
+  + SetUnlocked(unlocked: bool): void
+  + SetSelected(selected: bool): void
+  + IsInteractable(): bool
+  + GetRecipe(): Recipe
+}
+
+class RightPageUI {
+  + formulaParent: Transform
+  + formulaPrefab: CookingFormulaUI
+  + recipeIconImage: Image
+  __
+  + DisplayRecipe(recipe: Recipe): void
+}
+
+class CookingFormulaUI {
+  + stationParent: Transform
+  + ingredientsParent: Transform
+  + spellsParent: Transform
+  + stationIconPrefab: Image
+  + ingredientIconPrefab: GameObject
+  + spellIconPrefab: Image
+  + stationIcons: Sprite[]
+  + spellIcons: Sprite[]
+  __
+  + Setup(recipe: Recipe): void
+  - getCollectableByCategoryType(ingredient: CollectableType): Collectable
+  - ClearAll(): void
+  - GetStationScale(station: StationType): float
+}
+
+class Recipe <<ScriptableObject>> {
+  + ingredientsNeeded: List<CollectableType>
+  + amountNeeded: List<int>
+  + orderTime: int
+  + image: Sprite
+  + money: int
+  + foodType: CollectableType
+  + formula: CookingFormula
+}
+
+class CookingFormula {
+  + station: StationType
+  + spells: List<SpellType>
+}
+
+enum StationType <<Enumeration>> {
+enum StationType <<Enumeration>> {
+  CuttingBoard
+  Keg
+  Oven
+  Pot
+  Stove
+}
+
+enum SpellType <<Enumeration>> {
+  Water
+  Fire
+  Growing
+  Cut
+}
+
+
+' === EXTERNAL SYSTEMS ===
+
+node RecipeTracker
+
+node OrderManager
+
+node Inventory
+
+node ItemManager
+
+node EndOfDayManager
+
+node BookPanelUI
+
+node CollectableType
+
+node CollectableCategory
+
+' === UNITY COMPONENTS ===
+
+class Button <<Unity UI>> {
+  + onClick: UnityEvent
+  + interactable: bool
+}
+
+' === NODES (GameObjects) ===
+
+node "MenuPanel\nGameObject" as MenuPanelGO
+
+note right of MenuPanelGO
+  Pauses game when active
+  (Time.timeScale = 0)
+end note
+
+node "Right Page\nUI Panel" as RightPageGO
+
+
+' === RELATIONSHIPS ===
+
+' MenuManager composition
+MenuPanelGO "1" *-- "1" MenuManager : contains
+MenuPanelGO "1" *-- "1" MenuPanelUI : contains
+
+' MenuManager references
+MenuManager "1" o-- "1" RightPageUI : rightPageUI
+MenuManager "1" o-- "1" RecipeIconUI : recipeIconPrefab
+
+' MenuManager external references
+MenuManager "1" --> "1" RecipeTracker : queries unlocked recipes
+MenuManager "1" --> "1" OrderManager : updates recipe list
+MenuManager "1" --> "1" Inventory : accesses inventory
+MenuManager "1" --> "1" ItemManager : validates items
+MenuManager "1" --> "1" MenuPanelUI : closes menu
+MenuManager "1" --> "1" EndOfDayManager : triggers day end
+
+' MenuPanelUI references
+MenuPanelUI "1" --> "1" OrderManager : starts generation
+
+' RecipeIconUI composition
+RecipeIconUI "1" o-- "1" Button : button
+RecipeIconUI "1" o-- "1" Recipe : recipe
+
+' RecipeIconUI relationships
+RecipeIconUI --> MenuManager : calls OnRecipeIconClicked
+RecipeIconUI --> BookPanelUI : alternative parent
+
+' RightPageUI composition
+RightPageGO "1" *-- "1" RightPageUI : contains
+RightPageUI "1" o-- "1" CookingFormulaUI : formulaPrefab
+
+' RightPageUI relationships
+RightPageUI "1" --> "many" CookingFormulaUI : instantiates
+
+' CookingFormulaUI relationships
+CookingFormulaUI "1" --> "1" Recipe : displays
+CookingFormulaUI "1" --> "1" CookingFormula : uses
+CookingFormulaUI "1" --> "1" ItemManager : gets collectables
+
+' Recipe relationships
+Recipe "1" *-- "1" CookingFormula : formula
+Recipe "1" --> "many" CollectableType : ingredientsNeeded
+Recipe "1" --> "1" CollectableType : foodType
+
+' CookingFormula relationships
+CookingFormula "1" --> "1" StationType : station
+CookingFormula "1" --> "many" SpellType : spells
+
+' Inventory filtering
+MenuManager "1" --> "1" Inventory : filters via FilterInventoryForRecipes
+Inventory --> RecipeTracker : checks sub-recipes
+
+' RecipeTracker relationships
+RecipeTracker "1" --> "many" Recipe : manages
+
+' Node usage
+Recipe --> CollectableCategory : uses
+CookingFormula --> StationType : uses
+CookingFormula --> SpellType : uses
+
+@enduml
+

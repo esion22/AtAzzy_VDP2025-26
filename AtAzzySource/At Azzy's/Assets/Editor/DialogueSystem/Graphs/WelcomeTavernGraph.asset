@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0202a3095b7477a4091d56344f0af6b3, type: 3}
+  m_Name: WelcomeTavernGraph
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::DS.Data.Save.DSGraphSaveDataSO
+  <FileName>k__BackingField: WelcomeTavern
+  <Groups>k__BackingField: []
+  <Nodes>k__BackingField:
+  - <ID>k__BackingField: 428f053b-d49b-4639-b6b5-61de23503954
+    <Name>k__BackingField: WelcomeTavern2
+    <Text>k__BackingField: "Take orders, cook fast, and keep customers happy\u2014before
+      they explode faster than Azzy\u2019s transformation spell."
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 595, y: 129}
+  - <ID>k__BackingField: 12f8dd14-dac3-458c-ad15-ae6fa9e1bc1f
+    <Name>k__BackingField: WelcomeTavern1
+    <Text>k__BackingField: 'The tavern is open!
+
+      Time to roll up your sleeves
+      and let your magic sizzle.'
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 428f053b-d49b-4639-b6b5-61de23503954
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 206, y: 129}
+  - <ID>k__BackingField: 855e95f7-f6db-42a5-8ff5-baad7847f49b
+    <Name>k__BackingField: RepeatWelcomeTavern
+    <Text>k__BackingField: "Welcome back to the tavern\u2014let\u2019s deliver the
+      best experience."
+    <Choices>k__BackingField:
+    - <Text>k__BackingField: Next Dialogue
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 206, y: 354.5}
+  <OldGroupNames>k__BackingField: []
+  <OldUngroupedNodeNames>k__BackingField:
+  - WelcomeTavern2
+  - WelcomeTavern1
+  - RepeatWelcomeTavern
+  <OldGroupedNodeNames>k__BackingField:
+    list: []

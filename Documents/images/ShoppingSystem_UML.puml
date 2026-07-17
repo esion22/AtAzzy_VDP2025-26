@@ -1,0 +1,147 @@
+@startuml ShoppingSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === MAIN SHOPPING SYSTEM ===
+
+class ShopItem <<ScriptableObject>> {
+  + itemToGive: Collectable
+  + price: int
+}
+
+class ShopManager <<MonoBehaviour>> {
+  + itemsForSale: List<ShopItem>
+  + playerStats: PlayerStats
+  + player: PlayerItemController
+  - playerInventory: Inventory
+  - purchaseClip: AudioClip
+  - _audioManager: AudioManager
+  __
+  - Start(): void
+  + BuyItem(item: ShopItem): void
+}
+
+class ShopPanelUI <<MonoBehaviour>> {
+  - closeButton: Button
+  - currentShopManager: ShopManager
+  - numberOfFinalRecipes: int
+  __
+  - Awake(): void
+  + OpenShopUI(shopManager: ShopManager): void
+  - ParseName(collectableName: String): String
+  - EnableInteractable(type: CollectableType): bool
+  - CloseShopUI(): void
+  - CheckForFinaleTrigger(): void
+  - Update(): void
+}
+
+class SalesManNPC <<MonoBehaviour>> {
+  + shopManager: ShopManager
+  + shopPanelUI: ShopPanelUI
+  - playerInRange: bool
+  __
+  - Awake(): void
+  + StartShop(): void
+  - OnTriggerEnter2D(other: Collider2D): void
+  - OnTriggerExit2D(other: Collider2D): void
+}
+
+' === EXTERNAL SYSTEMS (NODES) ===
+
+node Inventory
+node PlayerStats
+node PlayerItemController
+node RecipeTracker
+node AudioManager
+node GameFinaleFarmManager
+node Collectable
+
+' === UNITY COMPONENTS ===
+
+class Button <<Unity UI>> {
+  + onClick: UnityEvent
+  + interactable: bool
+}
+
+
+' === NODES (GameObjects/Prefabs) ===
+
+node "ShopManager\nGameObject" as ShopManagerGO
+note right of ShopManagerGO
+  Placed in scene
+  References shop configuration
+end note
+
+node "SalesMan NPC\nGameObject" as SalesManGO
+note right of SalesManGO
+  Requires Collider2D (Is Trigger)
+  Must have "Highlight" child
+end note
+
+node "ShopPanel\nUI Canvas" as ShopPanelUI_GO
+
+node "ItemSlot\nPrefab" as ItemSlotPrefab
+note right of ItemSlotPrefab
+  Contains:
+  - ItemName (TextMeshProUGUI)
+  - Price (TextMeshProUGUI)
+  - Icon (Image)
+  - BuyButton (Button)
+  - LockOverlay (GameObject)
+end note
+
+node "ShopItem\nAssets" as ShopItemAssets
+note left of ShopItemAssets
+  ScriptableObject assets
+  Created via menu
+end note
+
+' === RELATIONSHIPS ===
+
+' GameObject composition
+ShopManagerGO "1" *-- "1" ShopManager : contains
+SalesManGO "1" *-- "1" SalesManNPC : contains
+ShopPanelUI_GO "1" *-- "1" ShopPanelUI : contains
+
+' ShopManager relationships
+ShopManager "1" o-- "many" ShopItem : itemsForSale
+ShopManager "1" --> "1" PlayerStats : playerStats
+ShopManager "1" --> "1" PlayerItemController : player
+ShopManager "1" --> "1" Inventory : playerInventory
+ShopManager "1" --> "1" AudioManager : _audioManager
+ShopManager --> RecipeTracker : calls UnlockRecipe
+
+' ShopItem relationships
+ShopItemAssets "many" ..> "many" ShopItem : <<instances>>
+ShopItem "1" o-- "1" Collectable : itemToGive
+
+' ShopPanelUI relationships
+ShopPanelUI "1" o-- "1" Button : closeButton
+ShopPanelUI "1" --> "1" ShopManager : currentShopManager
+ShopPanelUI --> RecipeTracker : checks unlocked recipes
+ShopPanelUI --> GameFinaleFarmManager : triggers finale
+ShopPanelUI --> ItemSlotPrefab : instantiates
+
+
+' SalesManNPC relationships
+SalesManNPC "1" --> "1" ShopManager : shopManager
+SalesManNPC "1" --> "1" ShopPanelUI : shopPanelUI
+
+' Button callbacks
+Button --> ShopManager : onClick calls BuyItem
+Button --> ShopPanelUI : onClick calls CloseShopUI
+
+' ShopManager buying logic flow
+ShopManager --> Inventory : Add(Collectable)
+ShopManager --> PlayerStats : GetMoney()\nSpendMoney()
+
+
+@enduml
+

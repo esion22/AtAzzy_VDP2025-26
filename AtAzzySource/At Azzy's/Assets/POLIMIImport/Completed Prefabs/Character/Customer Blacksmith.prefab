@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7970080808962461311
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2429038305748519304, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.8125
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379686141725066061, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4729fc28dd6202f40b8194db23099420, type: 2}
+    - target: {fileID: 6350266649365860936, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: customerPortraitImage
+      value: 
+      objectReference: {fileID: 2398275797733112376, guid: 6d45306a37ca23c46a32f6941fe3771c, type: 3}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157254309905779785, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7248466449905303045, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4723107735738678597, guid: 9a2e165be0b99d743a72d068aae1fbd1, type: 3}
+    - target: {fileID: 7737217281560143802, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+      propertyPath: m_Name
+      value: Customer Blacksmith
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}

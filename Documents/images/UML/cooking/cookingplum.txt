@@ -1,0 +1,251 @@
+@startuml CookingSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' 1. The Actor
+actor Player
+
+' 2. The Enumerations
+enum CookingStationStateEnum <<Enumeration>> {
+  RESTING
+  READY
+  COOKING
+  DONE
+  NONE
+}
+
+enum CollectableCategory <<Enumeration>> {
+  NONE
+  SEED
+  INGREDIENT
+  FOOD
+  RECIPE
+}
+
+enum CollectableType <<Enumeration>> {
+}
+
+enum SpellEnum <<Enumeration>> {
+  FIRE
+  WATER
+  GROWTH
+  CUT
+  NONE
+}
+
+' 3. The Core Classes
+class PlayerCook {
+  - interactionDistance: float
+  - cookingHighlightPrefab: GameObject
+  - _cookingHighlightInstance: GameObject
+  - playerItemController: PlayerItemController
+  - currentStation: AbstractCookingStation
+  - itemManager: ItemManager
+  __
+  - Start(): void
+  - Update(): void
+  - CollectAndResetStation(): void
+  - FindClosestStation(): void
+}
+
+abstract class AbstractCookingStation {
+  # acceptedIngredients: List<CollectableType>
+  # CookingSlots: ArrayList
+  # CookingRecipes: List<Recipe>
+  # OutputSlot: CollectableType
+  # doneThreshold: int
+  # isDiscrete: bool
+  # CookingBarValue: float
+  # CurrentVelocity: float
+  # cookingVelocity: float
+  # cookingDeceleration: float
+  # minNegativeVelocity: float
+  # CurrentState: CookingStationStateEnum
+  # spellsNeededToWork: List<SpellEnum>
+  # _spellHistory: ArrayList
+  # cookingBarSlider: Slider
+  # itemCloud: GameObject
+  # itemSpriteImage: Image
+  # itemQuantityText: TextMeshProUGUI
+  # spriteRotationSpeed: float
+  # itemManager: ItemManager
+  # audioManager: AudioManager
+  + OnRecipeCompleted: Action<CollectableType>
+  + OnCookingFailed: Action
+  + OnIngredientPlaced: Action<CollectableType>
+  + OnSpellReceived: Action<SpellEnum>
+  __
+  # {abstract} Start(): void
+  + {abstract} OnSpellHit(spellType: SpellEnum): void
+  + TryToAddIngredient(player: PlayerItemController): void
+  + TryRetrieveIngredients(player: PlayerItemController): bool
+  # UpdateCookingBar(): void
+  # UpdateCookingBarDiscrete(): void
+  # SetCookingSlot(ingredient: CollectableCategory): void
+  + GetOutputSlot(): CollectableType
+  + ResetOutputSlot(): void
+  # {abstract} ResetStation(): void
+  # {abstract} CookingReady(): void
+  # CheckRecipes(givenIngredients: ArrayList): CollectableType
+  # UpdateVisualFeedback(): void
+  # RotateSprites(sprites: List<Sprite>): IEnumerator
+}
+
+class BoilingStation {
+  - restingSprite: Sprite
+  - readySprite: Sprite
+  - cookingSprites: List<Sprite>
+  - _spriteRenderer: SpriteRenderer
+  - _animationCoroutine: Coroutine
+  - _isAnimating: bool
+  __
+  # Start(): void
+  + OnSpellHit(spellType: SpellEnum): void
+  - AnimateCookingSprites(): IEnumerator
+  + UpdateCookingBar(): void
+  # CookingReady(): void
+  # ResetStation(): void
+}
+
+class StoveStation {
+  - restingSprite: Sprite
+  - readySprite: Sprite
+  - cookingSprites: List<Sprite>
+  - _spriteRenderer: SpriteRenderer
+  - _animationCoroutine: Coroutine
+  - _isAnimating: bool
+  __
+  # Start(): void
+  + TryToAddIngredient(player: PlayerItemController): void
+  + OnSpellHit(spellType: SpellEnum): void
+  - AnimateCookingSprites(): IEnumerator
+  + UpdateCookingBar(): void
+  # CookingReady(): void
+  # ResetStation(): void
+}
+
+class OvenStation {
+  - restingSprite: Sprite
+  - readySprite: Sprite
+  - cookingSprites: List<Sprite>
+  - _spriteRenderer: SpriteRenderer
+  - _animationCoroutine: Coroutine
+  - _isAnimating: bool
+  __
+  # Start(): void
+  + TryToAddIngredient(player: PlayerItemController): void
+  + OnSpellHit(spellType: SpellEnum): void
+  - AnimateCookingSprites(): IEnumerator
+  + UpdateCookingBar(): void
+  # CookingReady(): void
+  # ResetStation(): void
+}
+
+class KegStation {
+  - restingSprite: Sprite
+  - workingSprites: List<Sprite>
+  - _spriteRenderer: SpriteRenderer
+  - _animationCoroutine: Coroutine
+  - _isAnimating: bool
+  __
+  # Start(): void
+  + OnSpellHit(spellType: SpellEnum): void
+  - AnimateCookingSprites(): IEnumerator
+  + UpdateCookingBar(): void
+  # CookingReady(): void
+  # ResetStation(): void
+}
+
+class CuttingBoard {
+  - restingSprite: Sprite
+  - cutSprites: List<Sprite>
+  - _spriteRenderer: SpriteRenderer
+  - _animationCoroutine: Coroutine
+  - _isAnimating: bool
+  __
+  # Start(): void
+  + OnSpellHit(spellType: SpellEnum): void
+  - AnimateCutSprites(): IEnumerator
+  + UpdateCookingBar(): void
+  # CookingReady(): void
+  # ResetStation(): void
+}
+
+interface ISpellInteractable <<Interface>> {
+  + void OnSpellHit(spellType: SpellEnum)
+}
+
+' 4. GameObjects/Nodes
+node "Recipe\nScriptableObject" as RecipeNode
+node "PlayerItemController\nMonoBehaviour" as PlayerItemControllerNode
+
+node "ItemManager\nSingleton" as ItemManagerNode
+
+node "Inventory\nGameObject" as InventoryNode
+
+node "CookingHighlight\nGameObject" as CookingHighlightNode
+
+node "Canvas\nGameObject" as CanvasNode
+
+node "CookingBar\nSlider" as CookingBarNode
+
+node "ItemCloud\nGameObject" as ItemCloudNode
+
+node "Collectable Prefab\nGameObject" as CollectablePrefabNode
+
+' --- Relationships ---
+
+' Player to components
+Player "1" --o "1" PlayerCook : attached
+Player "1" --o "1" PlayerItemControllerNode : attached
+
+' PlayerCook relationships
+PlayerCook "1" --> "1" PlayerItemControllerNode : references
+PlayerCook "1" --> "*" AbstractCookingStation : finds/interacts
+PlayerCook "1" --> "1" CookingHighlightNode : controls
+PlayerCook "1" --> "1" ItemManagerNode : uses
+PlayerCook "1" --> "1" InventoryNode : uses
+
+' AbstractCookingStation inheritance and implementation
+BoilingStation --|> AbstractCookingStation : extends
+StoveStation --|> AbstractCookingStation : extends
+OvenStation --|> AbstractCookingStation : extends
+KegStation --|> AbstractCookingStation : extends
+CuttingBoard --|> AbstractCookingStation : extends
+
+AbstractCookingStation ..|> ISpellInteractable : implements
+
+' AbstractCookingStation relationships
+AbstractCookingStation --> CookingStationStateEnum : uses
+AbstractCookingStation --> CollectableType : uses
+AbstractCookingStation --> SpellEnum : uses
+AbstractCookingStation "1" --> "*" RecipeNode : contains
+AbstractCookingStation "1" --> "1" ItemManagerNode : uses
+AbstractCookingStation "1" --> "1" PlayerItemControllerNode : interacts with
+
+' Recipe relationships
+RecipeNode --> CollectableType : defines
+
+' Station UI composition
+AbstractCookingStation "1" *-- "1" CanvasNode : has
+CanvasNode "1" *-- "1" CookingBarNode : contains
+CanvasNode "1" *-- "1" ItemCloudNode : contains
+
+' ItemManager relationships
+ItemManagerNode "1" --> "*" CollectablePrefabNode : manages
+ItemManagerNode --> CollectableCategory : filters by
+ItemManagerNode --> CollectableType : filters by
+
+
+' ISpellInteractable usage
+ISpellInteractable --> SpellEnum : parameter
+
+@enduml
+

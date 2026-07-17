@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Magic Interactable
+  - Water
+  - UI
+  - Soil
+  - Carpet
+  - Farming Magic Interactable WATER
+  - Farming Magic Interactable GROWTH
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2087386047
+    locked: 0
+  - name: Floor
+    uniqueID: 2386801555
+    locked: 0
+  - name: Walls
+    uniqueID: 1916749547
+    locked: 0
+  - name: Decorations
+    uniqueID: 3460282363
+    locked: 0
+  - name: Seed
+    uniqueID: 272231007
+    locked: 0
+  - name: Collectible
+    uniqueID: 2007812459
+    locked: 0
+  - name: Player
+    uniqueID: 2134067523
+    locked: 0
+  - name: OnTopOfPlayer
+    uniqueID: 2325056845
+    locked: 0
+  - name: UI
+    uniqueID: 648563155
+    locked: 0
+  m_RenderingLayers:
+  - Default

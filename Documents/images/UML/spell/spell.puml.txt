@@ -1,0 +1,125 @@
+@startuml SpellSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' 1. The Actor
+actor Player
+
+' 2. The standard Classes
+class LayerMask {
+}
+
+class SpellCaster {
+  - interactableLayer: LayerMask
+  - enableSpellProjectiles: bool
+  - spellProjectilePrefab: GameObject
+  - projectileMaxSpeed: float
+  - projectileAcceleration: float
+  - gameCamera: Camera
+  - fireSpellSfx: AudioClip
+  - waterSpellSfx: AudioClip
+  - growthSpellSfx: AudioClip
+  - cutSpellSfx: AudioClip
+  - _lastHitCollider: Collider2D
+  - _audioManager: AudioManager
+  + currentSpell: SpellEnum
+  __
+  - Awake(): void
+  - Update(): void
+}
+
+enum SpellEnum <<Enumeration>> {
+  FIRE
+  WATER
+  GROWTH
+  CUT
+  NONE
+}
+
+class Highlitable {
+  - _highlightObject: GameObject
+  __
+  - Awake(): void
+  + Highlight(): void
+  + Unhighlight(): void
+}
+
+class SpellProjectile {
+  - _direction: Vector2
+  - _spellType: SpellEnum
+  - _maxSpeed: float
+  - _acceleration: float
+  - _currentSpeed: float
+  - ttl: int
+  - fireSprite: Sprite
+  - waterSprite: Sprite
+  - growthSprite: Sprite
+  - cutSprite: Sprite
+  - fireSpellSFX: AudioClip
+  - waterSpellSFX: AudioClip
+  - growhtSpellSFX: AudioClip
+  - cutSpellSFX: AudioClip
+  - playHit: bool
+  - scaleUpDuration: float
+  - animator: Animator
+  - fireHit: AnimationClip
+  - waterHit: AnimationClip
+  - growthHit: AnimationClip
+  - cutHit: AnimationClip
+  - _scaleUpTimer: float
+  - _isScalingUp: bool
+  - _audioManager: AudioManager
+  __
+  + Initialize(direction: Vector2, maxSpeed: float, \nacceleration: float, spell: SpellEnum): void
+  - Start(): void
+  - Update(): void
+  - UpdateScalingUp(): void
+  - OnTriggerEnter2D(other: Collider2D): void
+  - PlayHitAnimationDirectly(clip: AnimationClip): void
+}
+
+interface ISpellInteractable <<Interface>> {
+  + void OnSpellHit(spellType: SpellEnum)
+}
+
+' 3. The 3D Objects (Nodes)
+node "SpellProjectile\nGameObject" as SpellProjectileGO
+node InteractableObject
+node Highlight
+
+' --- Relationships ---
+
+' Player and SpellCaster
+Player "1" --o "1" SpellCaster
+
+' LayerMask and SpellCaster
+LayerMask "1" --o "1" SpellCaster : interactableLayer
+
+' SpellCaster outgoing calls
+SpellCaster "1" --> "1" SpellProjectileGO
+SpellCaster "1" --> "1" SpellProjectile : calls
+SpellCaster --> Highlitable : calls
+SpellCaster --> ISpellInteractable : Calls
+
+' SpellProjectile Logic to GameObject
+SpellProjectileGO "1" *-- "1" SpellProjectile
+
+' Interactable Object Composition
+InteractableObject "1" *-- "1" Highlitable
+InteractableObject "1" *-- "1" Highlight
+
+' Interactable Object Interfaces and Events
+InteractableObject ..|> ISpellInteractable : Implements
+InteractableObject --> SpellProjectile : CatchEvent
+
+' Highlight uses Enum
+Highlight --> SpellEnum : Uses
+
+@enduml

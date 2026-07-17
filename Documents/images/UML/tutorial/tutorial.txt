@@ -1,0 +1,251 @@
+@startuml TutorialSystem
+
+' Visual Styling
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 80
+hide circle
+
+' === CUTSCENE SYSTEM ===
+
+class CutsceneController {
+  - secondsDelay: int
+  - targetScene: string
+  - _timerCoroutine: Coroutine
+  __
+  - Start(): void
+  - TimerAndLoad(seconds: int, sceneName: string): IEnumerator
+}
+
+class BootsceneController {
+  __
+  - Awake(): void
+  + StartGame(): void
+  - OnSceneLoaded(scene: Scene, mode: LoadSceneMode): void
+  + QuitGame(): void
+}
+
+' === SHARED BASE STRUCTURE ===
+
+abstract class TutorialBase <<Abstract>> {
+  + {static} Instance
+  + IsActive: bool
+  - _currentStep: int
+  - _dialogueVisible: bool
+  - _pendingNextStep: int
+  - _waitCondition: Func<bool>
+  - _waitNextStep: int
+  - _originalDialogueWidth: float
+  - _originalDialoguePosition: Vector2
+  - _originalFontSize: float
+  - _highlightedSlotIndex: int
+  - TUTORIAL_COMPLETE_KEY: string
+  __
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  - StartTutorial(): void
+  # ShowStep(step: int): void
+  - ShowDialogue(text: string, nextStep: int): void
+  - HideDialogue(): void
+  - WaitUntil(condition: Func<bool>, nextStep: int): void
+  - ClearWait(): void
+  - SaveOriginalDialogueSize(): void
+  - SetTutorialDialogueWidth(): void
+  - RestoreOriginalDialogueSize(): void
+  - CompleteTutorial(): void
+  - OnDisable(): void
+  - HighlightSpellSlot(slotIndex: int): void
+  - ClearHotbarHighlight(): void
+}
+
+' === CONCRETE IMPLEMENTATIONS ===
+
+class FarmTutorial <<Singleton>> {
+  - _currentArrow: GameObject
+  - _tutorialSeed: Seed
+  - _seedPlanted: Seed
+  - _tutorialSeedPlanted: bool
+  - tutorialPlantCell: Vector3Int
+  - tutorialSeedName: string
+  - seedsInInventory: List<Collectable>
+  __
+  # ShowStep(step: int): void
+  - IsFarmingManagerReady(): bool
+  - IsSeedWatered(): bool
+  - IsSeedReadyToGrow(): bool
+  - IsTutorialPotatoCollected(): bool
+  - PlantTutorialSeed(): void
+  - SetTutorialPlantInteractable(enabled: bool): void
+  - ShowArrowAtWorldPosition(pos: Vector3): void
+  - StartWhenReady(): IEnumerator
+  - ClearArrow(): void
+  - SetHouseTrigger(enabled: bool): void
+  - SetSalesmanInteractable(enabled: bool): void
+}
+
+class CookingTutorial <<Singleton>> {
+  - _currentArrow: GameObject
+  - _playerInventory: Inventory
+  - _cookingStations: List<AbstractCookingStation>
+  - _isProcessingInventoryChange: bool
+  - _savedSlots: List<SlotData>
+  - ingredientPrefabs: List<GameObject>
+  - arrowOffset: Vector3
+  - cuttingBoardArrowOffset: Vector3
+  __
+  # ShowStep(step: int): void
+  - HandleRecipeCompleted(resultType: CollectableType): void
+  - HandleCookingFailed(): void
+  - HandleIngredientPlaced(ingredientType: CollectableType): void
+  - HandleInventoryChanged(): void
+  - HandleSpellReceived(spellType: SpellEnum): void
+  - HighlightWorldPosition(target: Transform): void
+  - ClearWorldHighlight(): void
+  - GiveTutorialIngredients(): void
+  - SavePlayerIngredients(): void
+  - RestorePlayerIngredients(): void
+  - RestoreLostIngredients(types: CollectableType[]): void
+  - SelectIngredientInInventory(targetType: CollectableType): void
+  - OnDestroy(): void
+}
+
+class ShopTutorial <<Singleton>> {
+  - _inventoryBeforeBuy: InventorySnapshot
+  - _dialogueCanvasGroup: CanvasGroup
+  __
+  # ShowStep(step: int): void
+  - StartTutorialAfterRunnerStart(): IEnumerator
+  - IsShopPanelOpen(): bool
+  - HasBoughtItem(): bool
+  - ForceStopRunnerDialogue(): void
+  - SetSalesmanInteractable(enabled: bool): void
+  - InitDialogueCanvasGroup(): void
+  - SetDialogueVisible(visible: bool): void
+}
+
+' === STRUCTS ===
+
+class SlotData <<Struct>> {
+  + prefabReference: GameObject
+  + quantity: int
+}
+
+class InventorySnapshot <<Struct>> {
+  + totalItemCount: int
+  __
+  + InventorySnapshot(inventory: Inventory)
+}
+
+' === UTILITY ===
+
+class TutorialResetter {
+  + {static} ResetAllTutorials(): void
+}
+
+class ArrowIndicator {
+  - target: Transform
+  - arrowUI: RectTransform
+  __
+  + SetTarget(newTarget: Transform): void
+  + ClearTarget(): void
+  - UpdateArrowTowardsTarget(pos: Vector3): void
+}
+
+' === EXTERNAL SYSTEMS ===
+
+node FarmingManager
+node AbstractCookingStation
+node OrderManager
+node Inventory
+node DSDialogueUI
+node DSDialogueRunner
+node HotbarController
+node PlayerPrefs
+node SceneFadeManager
+node SceneManager
+
+' === NODES ===
+
+node "Dragon Panel\nGameObject" as DragonPanel
+node "Arrow Prefab\nGameObject" as ArrowPrefab
+node "CutScene\nScene" as CutSceneScene
+node "FarmScene\nScene" as FarmSceneScene
+node "Video Player\nGameObject" as VideoPlayer
+
+' === CUTSCENE RELATIONSHIPS ===
+
+BootsceneController --> PlayerPrefs : checks "FarmTutorialDone"
+BootsceneController --> SceneFadeManager : FadeToScene()
+BootsceneController ..> CutSceneScene : routes to (first launch)
+BootsceneController ..> FarmSceneScene : routes to (tutorial done)
+
+CutsceneController --> SceneFadeManager : FadeToScene()
+CutsceneController --> SceneManager : LoadScene()
+CutsceneController ..> FarmSceneScene : transitions to
+
+CutSceneScene "1" *-- "1" CutsceneController : contains
+CutSceneScene "1" *-- "1" VideoPlayer : contains
+
+' === CUTSCENE TO TUTORIAL FLOW ===
+
+CutsceneController ..> FarmTutorial : <<triggers after transition>>
+
+' === INHERITANCE ===
+
+TutorialBase <|-- FarmTutorial
+TutorialBase <|-- CookingTutorial
+TutorialBase <|-- ShopTutorial
+
+' === SHARED RELATIONSHIPS ===
+
+TutorialBase "1" o-- "1" DragonPanel : references
+TutorialBase "1" o-- "1" ArrowPrefab : references
+TutorialBase "1" o-- "1" DSDialogueUI : references
+TutorialBase "1" o-- "1" DSDialogueRunner : references
+TutorialBase "1" o-- "1" HotbarController : references
+TutorialBase --> PlayerPrefs : saves progress
+
+' === FARM TUTORIAL SPECIFIC ===
+
+FarmTutorial --> FarmingManager : queries state
+FarmTutorial --> Inventory : adds seeds
+FarmSceneScene "1" *-- "0..1" FarmTutorial : activates
+
+' === COOKING TUTORIAL SPECIFIC ===
+
+CookingTutorial "1" *-- "many" SlotData : contains
+CookingTutorial "1" --> "many" AbstractCookingStation : subscribes to events
+CookingTutorial --> OrderManager : disables
+CookingTutorial --> Inventory : manages items
+
+AbstractCookingStation ..> CookingTutorial : OnRecipeCompleted\nOnCookingFailed\nOnIngredientPlaced\nOnSpellReceived
+Inventory ..> CookingTutorial : OnInventoryChanged
+
+' === SHOP TUTORIAL SPECIFIC ===
+
+ShopTutorial "1" *-- "1" InventorySnapshot : contains
+ShopTutorial "1" o-- "1" ArrowIndicator : references
+ShopTutorial --> Inventory : compares snapshots
+
+InventorySnapshot --> Inventory : reads state
+
+' === UTILITY RELATIONSHIPS ===
+
+TutorialResetter --> PlayerPrefs : deletes keys
+
+' === FLOW NOTE ===
+note right of BootsceneController
+  **First Launch Flow:**
+  1. Check FarmTutorialDone
+  2. If 0 → CutScene
+  3. CutsceneController waits 55s
+  4. Transition to FarmScene
+  5. FarmTutorial activates
+  
+  **Subsequent Launches:**
+  Direct to FarmScene
+end note
+
+@enduml

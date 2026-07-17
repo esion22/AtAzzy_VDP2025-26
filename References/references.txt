@@ -1,0 +1,9 @@
+Third-Party Asset References for At Azzy's
+
+1. Graphical Assets:
+- Tiny Farm RPG Asset Pack by Emanuelledev: https://emanuelledev.itch.io/farm-rpg
+- Pixel Crawler Asset Pack by Anokolisa: https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites
+- TextMesh Pro Fonts: dogica and pixel_operator
+
+2. Audio Assets:
+- General SFX and Background Music: OpenGameArt.org (https://opengameart.org/)

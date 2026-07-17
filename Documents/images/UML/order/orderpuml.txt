@@ -1,0 +1,265 @@
+@startuml OrderSystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' === MAIN ORDER SYSTEM CLASSES ===
+
+class OrderManager {
+  - recipes: List<Recipe>
+  - orderPrefab: GameObject
+  - orderParent: Transform
+  - isPrototype: bool
+  - prototypeRecipes: List<Recipe>
+  - itemsToSpawn: List<GameObject>
+  - initialOrders: int
+  - timeBetweenOrders: float
+  - deltaTimeBetweenOrders: float
+  - maxOrdersPresentOnScreen: int
+  - totalNumOfOrders: int
+  + customerQueue: CustomerQueueManager
+  + customerPrefabs: List<GameObject>
+  + customerSpawnPoint: Transform
+  + counterPoint: Transform
+  + exitPoint: Transform
+  + counterSlot: CounterSlot
+  - _currentOrders: List<Order>
+  - _playerStats: PlayerStats
+  - canGenerateOrders: bool
+  - ordersGenerated: int
+  - successfulOrders: int
+  - failedOrders: int
+  - moneyGained: int
+  __
+  - Start(): void
+  + StartOrderGeneration(): void
+  + GetCurrentOrders(): List<Order>
+  + TryToFurfillOrder(order: Order, item: Collectable): bool
+  + DeleteOrder(order: Order): void
+  - OrderGenerationCoroutine(): IEnumerator
+  + generateNewOrder(): void
+  - selectRandomCustomer(): GameObject
+  + OnCustomerLeavingCounter(): void
+  - checkValidRecipes(): List<Recipe>
+  - CanCookWithIngredients(available: Dictionary, \nneeded: Dictionary): bool
+  - RemoveOrder(order: Order, failed: bool): void
+  - RemoveOrderAnimation(order: Order, failed: bool): IEnumerator
+  - RefreshOrderPositions(): void
+  + CreateTutorialOrder(recipe: Recipe): Order
+  + RemoveTutorialOrder(order: Order): void
+  + GetSuccessfulOrders(): int
+  + GetFailedOrders(): int
+  + GetMoneyGained(): int
+}
+
+class Order {
+  - _recipe: Recipe
+  - _timeRemainingBar: Image
+  - _timeRemainingBarRectTransform: RectTransform
+  - _customerImage: Image
+  - _remainingTime: int
+  - _orderGO: GameObject
+  - _orderManager: OrderManager
+  - _isTutorialOrder: bool
+  + OnOrderExpired: Action<Order>
+  __
+  + SetRecipe(recipe: Recipe): void
+  + GetRecipe(): Recipe
+  - SetImages(): void
+  + SetCustomerImage(customerImage: Sprite): void
+  - OrderTimer(): IEnumerator
+  + SetTutorialMode(isTutorial: bool): void
+  + IsTutorialOrder(): bool
+}
+
+class Recipe <<ScriptableObject>> {
+  + ingredientsNeeded: List<CollectableType>
+  + amountNeeded: List<int>
+  + orderTime: int
+  + image: Sprite
+  + money: int
+  + foodType: CollectableType
+  + formula: CookingFormula
+}
+
+class Customer {
+  - counterSlot: CounterSlot
+  - counterPoint: Transform
+  - exitPoint: Transform
+  + moveSpeed: float
+  - animator: Animator
+  - _spriteRenderer: SpriteRenderer
+  - _movement: Vector2
+  - _previousMovement: Vector2
+  - orderManager: OrderManager
+  - order: Order
+  - boxSpriteRenderer: SpriteRenderer
+  - foodSpriteRenderer: SpriteRenderer
+  - customerPortraitImage: Sprite
+  - queuePosition: Vector3
+  - state: CustomerState
+  - isAtCounter: bool
+  __
+  + Initialize(slot: CounterSlot, counter: Transform, \nexit: Transform, linkedOrderManager: OrderManager, \nlinkedOrder: Order, initialQueuePosition: Vector3): void
+  - Awake(): void
+  - Start(): void
+  - Update(): void
+  + SetOrderSprite(foodSprite: Sprite): void
+  + GetCustomerPortraitImage(): Sprite
+  + UpdateQueuePosition(newPosition: Vector3): void
+  + MoveToCounter(): void
+  + Leave(): void
+  + getState(): CustomerState
+  - MoveTo(target: Vector3): void
+  - StopMoving(): void
+  - Reached(target: Vector3): bool
+  - CheckOrder(): void
+  - OnOrderExpired(expiredOrder: Order): void
+  - UpdateOrderDisplay(): void
+}
+
+class CustomerQueueManager {
+  - counterPoint: Transform
+  - spaceBetweenCustomers: float
+  - maxQueueSize: int
+  - waitingCustomers: Queue<Customer>
+  - currentCustomerAtCounter: Customer
+  __
+  + IsFull(): bool
+  + AddCustomerToQueue(customer: Customer): void
+  + MoveNextCustomerToCounter(): void
+  + OnCustomerLeftCounter(): void
+  - UpdateQueuePositions(): void
+  + GetNextQueuePosition(): Vector3
+  + RemoveCustomerFromQueue(customer: Customer): void
+}
+
+enum CustomerState <<Enumeration>> {
+  WaitingInQueue
+  WalkingToCounter
+  WaitingAtCounter
+  Leaving
+}
+
+class CounterSlot {
+  - currentItem: Collectable
+  __
+  + getCurrentItem(): Collectable
+  + HasItem(): bool
+  + PlaceItem(categoryType: string): bool
+  + PickUpItem(): Collectable
+}
+
+class EndOfDayManager <<Singleton>> {
+  + {static} Instance: EndOfDayManager
+  - _orderManager: OrderManager
+  - _endOfDayUI: EndOfDayUI
+  - _transitionDuration: float
+  - delayBeforeTransition: float
+  - _currentDayStats: DayStats
+  - _dayEnded: bool
+  + OnDayEnded: UnityEvent
+  __
+  - Awake(): void
+  - Start(): void
+  + CheckForDayEnd(): void
+  + TriggerEndOfDay(): void
+  - EndOfDaySequence(): IEnumerator
+}
+
+' === NODES (GameObjects and External Systems) ===
+
+node "Order UI Prefab\nGameObject" as OrderUIGO
+
+node "Customer\nGameObject" as CustomerGO
+
+node PlayerStats
+
+node Collectable
+
+node DataManager
+
+node CookingTutorial
+
+node CookingFormula <<ScriptableObject>>
+
+node CollectableType <<Enum>>
+
+node EndOfDayUI
+
+node DayStats
+
+node GameManager
+
+' === RELATIONSHIPS ===
+
+' OrderManager manages Orders
+OrderManager "1" *-- "*" Order : manages
+
+' OrderManager references Recipe pool
+OrderManager "1" o-- "*" Recipe : references
+
+' OrderManager spawns and tracks Customers
+OrderManager "1" --> "*" CustomerGO : spawns
+OrderManager "1" --> "*" Customer : tracks
+
+' OrderManager owns CustomerQueueManager
+OrderManager "1" *-- "1" CustomerQueueManager : owns
+
+' OrderManager uses CounterSlot
+OrderManager "1" o-- "1" CounterSlot : references
+
+' Order relationships
+OrderUIGO "1" *-- "1" Order : contains
+Order "1" o-- "1" Recipe : references
+Order "1" --> "1" OrderManager : notifies
+
+' Customer relationships
+CustomerGO "1" *-- "1" Customer : contains
+Customer "1" o-- "1" Order : linked order
+Customer "1" o-- "1" OrderManager : references
+Customer "1" o-- "1" CounterSlot : checks
+Customer "1" *-- "1" CustomerState : has state
+
+' CustomerQueueManager relationships
+CustomerQueueManager "1" *-- "*" Customer : manages queue
+CustomerQueueManager "1" o-- "1" Customer : current at counter
+
+' Recipe relationships
+Recipe "1" o-- "*" CollectableType : ingredients
+Recipe "1" o-- "1" CollectableType : foodType
+Recipe "1" o-- "1" CookingFormula : formula
+
+' CounterSlot relationships
+CounterSlot "1" o-- "0..1" Collectable : currentItem
+
+' Order events and interactions
+Order --> Customer : OnOrderExpired\nevent
+Customer --> Order : subscribes to event
+Customer --> CounterSlot : checks for\nmatching item
+
+' OrderManager external interactions
+OrderManager --> PlayerStats : awards money
+OrderManager --> DataManager : tracks statistics
+OrderManager --> CookingTutorial : tutorial mode
+
+' EndOfDayManager relationships
+EndOfDayManager "1" ..> "1" EndOfDayManager : <<Singleton>>
+EndOfDayManager "1" o-- "1" OrderManager : checks
+EndOfDayManager "1" o-- "1" EndOfDayUI : references
+EndOfDayManager "1" *-- "1" DayStats : owns
+EndOfDayManager --> GameManager : gets current day
+OrderManager --> EndOfDayManager : notifies when\nno valid recipes
+
+' Fulfillment flow
+CounterSlot --> OrderManager : item placed\ntriggers check
+OrderManager --> Collectable : validates item type
+
+@enduml
+

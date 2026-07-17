@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff7cd5f2689a0f4ea5a82140962398a, type: 3}
+  m_Name: Bread
+  m_EditorClassIdentifier: Assembly-CSharp::Orders.Recipe
+  ingredientsNeeded: 0f0000000c000000
+  amountNeeded: 0100000001000000
+  orderTime: 60
+  image: {fileID: 4158992870742115853, guid: 37b7e105e84e71d419cf92f8bbb1d398, type: 3}
+  money: 72
+  foodType: 4
+  formula:
+    station: 2
+    spells: 0100000000000000

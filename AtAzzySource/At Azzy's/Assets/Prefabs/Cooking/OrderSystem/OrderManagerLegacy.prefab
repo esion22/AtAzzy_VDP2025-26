@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1104921623975384722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8184822309313481118}
+  - component: {fileID: 6656752703657038728}
+  m_Layer: 0
+  m_Name: OrderManagerLegacy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8184822309313481118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104921623975384722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6656752703657038728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104921623975384722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f460fc215ab41d44ea3b48701d5bf19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OrderManager
+  recipes:
+  - {fileID: 11400000, guid: 1ceecabedb3fb6f49a6b45ddf457d73f, type: 2}
+  - {fileID: 11400000, guid: ea870ec4c2248bb48a320f39c3473559, type: 2}
+  - {fileID: 11400000, guid: 8586b610b94950f449f147d6fcec8025, type: 2}
+  - {fileID: 11400000, guid: 9160afe8294668d4d9a8abbff22042d0, type: 2}
+  - {fileID: 11400000, guid: 1d3aa7311c2c6754bb23a8958d02f9fc, type: 2}
+  - {fileID: 11400000, guid: ca19cfa44c62b834dab7c053ca655cdb, type: 2}
+  - {fileID: 11400000, guid: 66b652ed6f604f24c89206180b639a09, type: 2}
+  orderPrefab: {fileID: 3626128342188579587, guid: 0c5ff304098b1744a9cc6b58f9bdc9e7, type: 3}
+  orderParent: {fileID: 1571030453947717367, guid: 8abe4091bc3fa6a4d8fdeca340afa448, type: 3}
+  isPrototype: 1
+  prototypeRecipes: []
+  itemsToSpawn: []
+  initialOrders: 2
+  timeBetweenOrders: 15
+  deltaTimeBetweenOrders: 3
+  maxOrdersPresentOnScreen: 3
+  totalNumOfOrders: 5

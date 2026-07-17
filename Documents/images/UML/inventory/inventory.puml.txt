@@ -1,0 +1,233 @@
+@startuml InventorySystem
+
+' !!! THIS COMMAND IS REQUIRED TO FIX THE ERROR !!!
+allow_mixing
+
+' Visual Styling
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+' 1. The Actor
+actor Player
+
+' 2. The Enumerations
+enum CollectableCategory <<Enumeration>> {
+  NONE
+  SEED
+  INGREDIENT
+  FOOD
+  RECIPE
+}
+
+enum CollectableType <<Enumeration>> {
+  
+}
+
+' 3. The Core Classes
+class Collectable {
+  + isOnCounter: bool
+  + category: CollectableCategory
+  + type: CollectableType
+  - icon: Sprite
+  - rb2d: Rigidbody2D
+  - spriteRenderer: SpriteRenderer
+  - _audioManager: AudioManager
+  __
+  - Awake(): void
+  - Start(): void
+  - OnTriggerEnter2D(collision: Collider2D): void
+  + getCategoryType(): string
+  + getCategory(): CollectableCategory
+  + getType(): CollectableType
+  + getIcon(): Sprite
+  - Reset(): void
+  - UpdateIconFromSprite(): void
+}
+
+class Slot {
+  - category: CollectableCategory
+  - type: CollectableType
+  - count: int
+  - maxAllowed: int
+  - icon: Sprite
+  __
+  + Slot()
+  + getType(): CollectableType
+  + getCategory(): CollectableCategory
+  + getCategoryType(): string
+  + getCount(): int
+  + getIcon(): Sprite
+  + CanAddItem(): bool
+  + AddItem(item: Collectable): void
+  + RemoveItem(): void
+  + CopyFrom(other: Slot): void
+  + Clear(): void
+}
+
+class Inventory {
+  - slots: List<Slot>
+  - selection: Slot
+  - selectionIndex: int
+  - removedItems: Dictionary<(CollectableType, CollectableCategory), int>
+  + OnInventoryChanged: Action
+  __
+  + Inventory(numSlots: int)
+  + getSlots(): List<Slot>
+  + getSlot(index: int): Slot
+  + getSelection(): Slot
+  + getSelectionIndex(): int
+  + setSelection(slot: Slot): void
+  + setSelectionIndex(index: int): void
+  + select(index: int): void
+  + getCount(): int
+  + findSlotIndex(slot: Slot): int
+  + Add(itemToAdd: Collectable): void
+  + Remove(index: int): void
+  + RemoveSelection(): void
+  + ClearInventory(): void
+}
+
+class ItemManager <<Singleton>> {
+  + {static} Instance: ItemManager
+  + collectableItems: Collectable[]
+  - NoCollisionCategory: List<CollectableCategory>
+  - NoDroptableCategory: List<CollectableCategory>
+  + collectableDictionary: Dictionary<string, Collectable>
+  __
+  - Awake(): void
+  + isNoDroptableCategory(category: CollectableCategory): bool
+  - AddItem(item: Collectable): void
+  + isNoCollisionCategory(categoryType: CollectableCategory): bool
+  + GetItemByCategoryType(CategoryType: string): Collectable
+}
+
+node "PlayerItemController\nMonoBehaviour" as PlayerItemControllerNode
+
+node "GameManager\nSingleton" as GameManagerNode
+
+' 4. UI Classes
+class Slot_ui {
+  - itemIcon: Image
+  - quantityText: TextMeshProUGUI
+  - initialized: bool
+  __
+  - Awake(): void
+  - Start(): void
+  - InitializeComponents(): void
+  + SetItem(slot: Slot): void
+  + SetEmpty(): void
+}
+
+class FollowIconSprite {
+  - icon: Image
+  - qImage: Image
+  __
+  - Awake(): void
+  - Update(): void
+}
+
+class Inventory_ui {
+  - inventoryPanel: GameObject
+  - player: PlayerItemController
+  - inventory: Inventory
+  + slots: List<Slot_ui>
+  __
+  - Awake(): void
+  - WaitForGameManager(): IEnumerator
+  - InitAfterGameManagerReady(): void
+  - OnEnable(): void
+  - OnDisable(): void
+  - Update(): void
+  + ToggleInventory(): void
+  + getSlotsUI(): List<Slot_ui>
+  + Refresh(): void
+  - SetupSlotClickEvents(): void
+  + OnSlotClicked(slotID: int): void
+  + SelectItem(slotID: int): void
+  - RefreshSelectionHighlight(): void
+  + Remove(slotID: int): void
+}
+
+class QuickInventory_ui {
+  - previousSlot: Slot_ui
+  - currentSlot: Slot_ui
+  - nextSlot: Slot_ui
+  - inventory: Inventory
+  __
+  - OnEnable(): void
+  - OnDisable(): void
+  - Update(): void
+  + SelectNextSlot(): void
+  + SelectPreviousSlot(): void
+  - UpdateSlotDisplay(): void
+  - SetSlot(uiSlot: Slot_ui, slotData: Slot): void
+  - FindValidIndex(startIndex: int, direction: int, slots: List<Slot>)
+  - RefreshDisplay(): void
+  - GetCurrentSelectedIndex(): int
+}
+
+' 5. GameObjects/Nodes
+node "Inventory Panel\nGameObject" as InventoryPanelNode
+node "Quick Inventory Panel\nGameObject" as QuickInventoryPanelNode
+node "Collectable Prefab\nGameObject" as CollectablePrefabNode
+
+' --- Relationships ---
+
+' Player to Controller
+Player "1" --o "1" PlayerItemControllerNode
+
+' PlayerItemController relationships
+PlayerItemControllerNode "1" --> "1" Inventory : manages
+PlayerItemControllerNode "1" --> "1" Collectable : drops/picks
+
+' Collectable with Enums
+Collectable --> CollectableCategory : uses
+Collectable --> CollectableType : uses
+
+' Collectable collision with PlayerItemController
+Collectable "1" --> "1" PlayerItemControllerNode : OnTriggerEnter2D
+
+' Slot relationships
+Slot --> CollectableCategory : stores
+Slot --> CollectableType : stores
+Slot "1" --> "0..99" Collectable : contains data from
+
+' Inventory relationships
+Inventory "1" *-- "36" Slot : contains
+Inventory "1" --> "0..1" Slot : selection
+
+' ItemManager relationships
+ItemManager "1" --> "*" Collectable : manages prefabs
+ItemManager "1" --> "*" CollectableCategory : filters by
+ItemManager ..> CollectablePrefabNode : instantiates
+
+' GameManager relationships
+GameManagerNode "1" *-- "1" Inventory : playerInventory
+GameManagerNode "1" *-- "1" ItemManager : itemManager
+
+' UI relationships
+Inventory_ui "1" *-- "36" Slot_ui : contains
+Inventory_ui "1" --> "1" Inventory : displays
+Inventory_ui "1" --> "1" PlayerItemControllerNode : references
+Inventory_ui "1" --> "1" ItemManager : uses
+
+QuickInventory_ui "1" *-- "1" Slot_ui : contains
+QuickInventory_ui "1" --> "1" Inventory : displays
+
+' Slot_ui relationships
+Slot_ui "1" --> "1" Slot : displays
+
+' FollowIconSprite relationships
+Slot_ui "1" ..> "0..1" FollowIconSprite : may use for quantity text
+
+' Panel relationships
+InventoryPanelNode "1" *-- "1" Inventory_ui : attached
+QuickInventoryPanelNode "1" *-- "1" QuickInventory_ui : attached
+
+' Event subscription
+Inventory_ui ..|> Inventory : OnInventoryChanged <<subscribe>>
+QuickInventory_ui ..|> Inventory : OnInventoryChanged <<subscribe>>
+
+@enduml

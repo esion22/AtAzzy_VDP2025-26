@@ -1,0 +1,167 @@
+@startuml PauseMenuUML
+
+' Agreed Syntax Settings
+allow_mixing
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+hide circle
+
+
+' Main class
+
+class PauseMenu <<Singleton>> {
+
+  + {static} Instance: PauseMenu
+
+  - pauseMenuUI: GameObject
+
+  - settingsMenuUI: GameObject
+
+  - creditsMenuUI: GameObject
+
+  - hudCanvasGroup: CanvasGroup
+
+  + isPaused: bool
+
+  - SALES_DIALOGUE: string
+
+  - previousTimeScale: float
+
+  - _gameFinaleFarmManager: GameFinaleFarmManager
+
+  - _currentScene: string
+
+  - unlockFinaleButton: GameObject
+
+  __
+
+  - Awake(): void
+
+  - OnDestroy(): void
+
+  - Update(): void
+
+  - UpdateUnlockFinaleButtonState(): void
+
+  - OnSceneLoaded(): void
+
+  - BindHUD(): void
+
+  - Pause(): void
+
+  + Resume(): void
+
+  + PauseButton(): void
+
+  + OpenSettings(): void
+
+  + CloseSettings(): void
+
+  + OpenCredits(): void
+
+  + CloseCredits(): void
+
+  - SetHUDVisible(visible: bool): void
+
+  - IsBootScene(): bool
+
+  + QuitGame(): void
+
+  + UnlockFinaleContent(): void
+
+}
+
+
+class SettingsMenu {
+
+  + musicSlider: Slider
+
+  + sfxSlider: Slider
+
+  __
+
+  - Start(): void
+
+  + isMusicVolumeChanged(volume: float): void
+
+  + isSFXVolumsChanged(volume: float): void
+
+}
+
+
+node "hudCanvasGroup\nCanvasGroup" as hudCanvas {
+
+}
+
+
+node "_gameFinaleFarmManager\nGameFinaleFarmManager" as farmManager {
+
+}
+
+
+node "unlockFinaleButton\nGameObject" as finaleButton {
+
+}
+
+
+node "pauseMenuUI\nGameObject" as pauseMenu {
+
+}
+
+
+node "settingsMenuUI\nGameObject" as settingsMenu {
+
+}
+
+
+node "creditsMenuUI\nGameObject" as creditsMenu {
+
+}
+
+
+' Relationships
+
+PauseMenu "1" *-- "1" SettingsMenu : contains
+
+PauseMenu "1" o-- "1" hudCanvas : references
+
+PauseMenu "1" o-- "1" farmManager : references
+
+PauseMenu "1" *-- "1" finaleButton : owns
+
+PauseMenu "1" *-- "1" pauseMenu : owns
+
+PauseMenu "1" *-- "1" settingsMenu : owns
+
+PauseMenu "1" *-- "1" creditsMenu : owns
+
+PauseMenu "1" ..> "1" PauseMenu : <<Singleton>>
+
+
+' UI Flow Relationships
+
+pauseMenu ..> settingsMenu : OpenSettings() /\nCloseSettings()
+
+pauseMenu ..> creditsMenu : OpenCredits() /\nCloseCredits()
+
+settingsMenu ..> pauseMenu : closes to
+
+creditsMenu ..> pauseMenu : closes to
+
+
+' Navigation Note
+note right of PauseMenu
+  **UI Navigation Flow:**
+  
+  Pause Menu (main)
+    ├─→ Settings Menu
+    │   └─→ Back to Pause Menu
+    └─→ Credits Menu
+        └─→ Back to Pause Menu
+        
+  All menus pause game (Time.timeScale = 0)
+  Resume restores previous timeScale
+end note
+
+@enduml

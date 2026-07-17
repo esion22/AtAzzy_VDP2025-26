@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &207497153116303035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1752401073072396922}
+  - component: {fileID: 6167657024856315424}
+  m_Layer: 0
+  m_Name: FarmTutorialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1752401073072396922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207497153116303035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.04444, y: 1.06141, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6167657024856315424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207497153116303035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01fe235c3e3f4651ae41e8270cab325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tutorial.FarmingTutorial
+  dragonPanel: {fileID: 0}
+  dragonPortrait: {fileID: 0}
+  arrowPrefab: {fileID: 2171928302860839219, guid: aad94d2d11f6fc145ada94fec26ced83, type: 3}
+  dialogueUI: {fileID: 0}
+  dialogueRunner: {fileID: 0}
+  hotbarController: {fileID: 0}
+  tutorialDialogueWidth: 500
+  tutorialFontSize: 16
+  cookingTutorialPanelPosition: {x: 184, y: 0}
+  skipTutorial: 0
+  seedsInInventory:
+  - {fileID: 1460602772516492950, guid: e75196ea48691504caf0271401d9bfe9, type: 3}
+  - {fileID: 1460602772516492950, guid: e3841458512f9454f957a7c01836b534, type: 3}
+  - {fileID: 1460602772516492950, guid: eca0c0803aebbae44b85c9d1cd9673de, type: 3}
+  - {fileID: 1460602772516492950, guid: 1a489969961494d41bb9062dd1d8caac, type: 3}
+  - {fileID: 1460602772516492950, guid: ffb74de2abd988c41bb590ee5ff4ede3, type: 3}
+  - {fileID: 1460602772516492950, guid: d986c54f7d89fb24d9c4c0a87f95da6b, type: 3}
+  - {fileID: 1460602772516492950, guid: 7fe520a94602c3849a77e7a62c960a75, type: 3}
+  houseTriggerCollider: {fileID: 0}
+  salesmanCollider: {fileID: 0}
+  tutorialPlantCell: {x: 0, y: 0, z: 0}
+  tutorialSeedName: potato-seed
+  arrowOffset: {x: -1.5, y: 0, z: 0}

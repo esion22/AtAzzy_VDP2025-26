@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1277815613435297742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7005411034103334720}
+  - component: {fileID: 7896853465719483472}
+  m_Layer: 0
+  m_Name: FarmingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7005411034103334720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277815613435297742}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7896853465719483472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277815613435297742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9eadeccd46821c4c988a7c2c52ff099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Farm.FarmingManager
+  seeds:
+  - {fileID: 5281421325953747820, guid: 5e2841d2916a1bc4ab9a7911bb7f91c0, type: 3}
+  - {fileID: 5281421325953747820, guid: 3ce625afb64cd564da6d329f6d074702, type: 3}
+  - {fileID: 5281421325953747820, guid: d310a345161a06042acf96ba0149de39, type: 3}
+  - {fileID: 5281421325953747820, guid: b3e7dc9219a44ec49a74e7b4232870b3, type: 3}
+  - {fileID: 5281421325953747820, guid: 683a44457d4e754418649dd9e044c637, type: 3}
+  - {fileID: 5281421325953747820, guid: 4d4155d21b03c6447bae7c48e02c1054, type: 3}
+  - {fileID: 5281421325953747820, guid: 1ab7747fd0f8aad41ac040f1b94538dd, type: 3}
+  - {fileID: 5281421325953747820, guid: 69627ae7be073e341903c79ed5cb369f, type: 3}
+  - {fileID: 5281421325953747820, guid: 4668081d5ca858344b9d2a5ff8b96856, type: 3}

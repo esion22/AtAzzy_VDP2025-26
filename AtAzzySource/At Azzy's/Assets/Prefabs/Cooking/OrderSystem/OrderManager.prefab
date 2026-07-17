@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1104921623975384722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8184822309313481118}
+  - component: {fileID: 6656752703657038728}
+  m_Layer: 0
+  m_Name: OrderManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8184822309313481118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104921623975384722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6656752703657038728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104921623975384722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f460fc215ab41d44ea3b48701d5bf19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OrderManager
+  recipes:
+  - {fileID: 11400000, guid: ea870ec4c2248bb48a320f39c3473559, type: 2}
+  - {fileID: 11400000, guid: 8586b610b94950f449f147d6fcec8025, type: 2}
+  - {fileID: 11400000, guid: 1d3aa7311c2c6754bb23a8958d02f9fc, type: 2}
+  - {fileID: 11400000, guid: ca19cfa44c62b834dab7c053ca655cdb, type: 2}
+  - {fileID: 11400000, guid: 66b652ed6f604f24c89206180b639a09, type: 2}
+  orderPrefab: {fileID: 3626128342188579587, guid: 0c5ff304098b1744a9cc6b58f9bdc9e7, type: 3}
+  orderParent: {fileID: 0}
+  isPrototype: 0
+  prototypeRecipes:
+  - {fileID: 11400000, guid: ea870ec4c2248bb48a320f39c3473559, type: 2}
+  - {fileID: 11400000, guid: 8586b610b94950f449f147d6fcec8025, type: 2}
+  - {fileID: 11400000, guid: 1d3aa7311c2c6754bb23a8958d02f9fc, type: 2}
+  - {fileID: 11400000, guid: ca19cfa44c62b834dab7c053ca655cdb, type: 2}
+  - {fileID: 11400000, guid: 66b652ed6f604f24c89206180b639a09, type: 2}
+  itemsToSpawn:
+  - {fileID: 4879120241230322460, guid: 66d1f771f16eee045a76195cf2a53d90, type: 3}
+  - {fileID: 4879120241230322460, guid: fcaa32438d983ab449cdefd2c47d9e61, type: 3}
+  - {fileID: 4879120241230322460, guid: 8175ceffde24d0444a8b4ab9482eb736, type: 3}
+  - {fileID: 4879120241230322460, guid: 4b39eef7156a2ae4ebe9a78a5efba270, type: 3}
+  - {fileID: 4879120241230322460, guid: 24497510e25a39f469dce48742d8f081, type: 3}
+  - {fileID: 4879120241230322460, guid: 79e798aa47a02a942b51aeb29a8b2b7a, type: 3}
+  - {fileID: 4879120241230322460, guid: 151fe55147f93ae4f8a43d47a08ad876, type: 3}
+  - {fileID: 4879120241230322460, guid: 9e4a137a69a36b749b55cceea52e8c14, type: 3}
+  initialOrders: 1
+  timeBetweenOrders: 7
+  deltaTimeBetweenOrders: 3
+  maxOrdersPresentOnScreen: 3
+  totalNumOfOrders: 5
+  customerQueue: {fileID: 0}
+  customerPrefabs:
+  - {fileID: 7667185858174029323, guid: 99df650c7487a6a4aad8fbe3c6bdcddb, type: 3}
+  - {fileID: 431066125551954373, guid: 61f318305f3a1c249b01e0babad20ba7, type: 3}
+  - {fileID: 3657754582877907546, guid: 2d9c96cd0b414d2438b19b7ecc7e0746, type: 3}
+  - {fileID: 1657754918427979282, guid: cee7bc24700d6944a86f8bc5b58a82b9, type: 3}
+  - {fileID: 7737217281560143802, guid: 770b3a0e1ea4ba244a925d80e47956ce, type: 3}
+  customerSpawnPoint: {fileID: 0}
+  counterPoint: {fileID: 0}
+  exitPoint: {fileID: 0}
+  counterSlot: {fileID: 0}
